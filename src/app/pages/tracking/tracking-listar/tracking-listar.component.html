@@ -1,0 +1,252 @@
+
+<div class="grid">
+    <div class="col-12">
+		<div class="card">
+			<div class="card">
+				
+				<div class="grid p-fluid">
+					<div class="col-12 md:col-3">
+						<input type="text" pinputtext="" [(ngModel)]="text" (input)="obtener()" placeholder="Search" class="p-inputtext p-component p-element">
+					</div>
+					
+					<div class="col-12 md:col-3">
+						<span class="p-float-label">
+							<p-calendar
+							inputId="calendar"
+							[(ngModel)]="FechaIni"
+							dateFormat="dd/mm/yy" 
+						 ></p-calendar>
+						 <label for="calendar">FECHA DESDE</label>
+						</span>	
+					</div>
+
+					<div class="col-12 md:col-3">
+						<span class="p-float-label">
+							<p-calendar
+							inputId="calendar"
+							[(ngModel)]="FechaFin"
+							dateFormat="dd/mm/yy" 
+						 ></p-calendar>
+						 <label for="calendar">FECHA DESDE</label>
+						</span>	
+					</div>
+					<div class="col-12 md:col-1 mx-auto">
+						<button pButton pRipple label="Buscar" icon="pi pi-search" class="p-button-success mr-2" (click)="obtener();"></button>
+					</div>
+					<div class="col-12 md:col-1 mx-auto">
+						<button pButton type="button" (click)="visibleSidebar5 = true" icon="pi pi-external-link" class="p-button-warning"></button>
+					</div>
+				</div>
+			</div>
+
+			<h5>TRACKING</h5>
+
+			<p-sidebar *ngIf="visibleSidebar5" [(visible)]="visibleSidebar5" [fullScreen]="true" [baseZIndex]="10000">   
+				<h5>TRACKING</h5>           
+				<p-table #dt1 [value]="this.DataCollection" dataKey="id" [rows]="20" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+					<!-- <p-table > -->
+					<ng-template pTemplate="header">
+						<tr>
+							<th colspan="2" style="background:#D5B6FE; text-align: center ;">ESTADO</th>
+							<th colspan="4" style="background:#FEDEB6; text-align: center;">DATOS PACIENTE</th>
+							<th colspan="3" style="background:#FCFEB6 ; text-align: center ;">INICIO</th>
+							<!-- <th colspan="3">LECTURA EQUIPO MEDICO</th> -->
+							<th colspan="3" style="background:#DEFEB6 ; text-align: center ;">ENVIO DE RESULTADOS</th>
+							<!-- <th colspan="3">PREVALIDACION</th> -->
+							<th colspan="3" style="background:#D5B6FE; text-align: center ;">VALIDACION</th>
+							
+						</tr>
+						<tr>
+							<th style="background:#FEDEB6; min-width: 8rem" pSortableColumn="SEMAFORO">SEMAFORO<p-sortIcon field="SEMAFORO"></p-sortIcon></th>
+							<th style="background:#FEDEB6; min-width: 8rem" pSortableColumn="TIEMPO">TIEMPO<p-sortIcon field="TIEMPO"></p-sortIcon></th>
+
+							<th style="background:#FEDEB6; min-width: 8rem" pSortableColumn="ORDEN">ORDEN<p-sortIcon field="ORDEN"></p-sortIcon></th>
+							<th style="background:#FEDEB6; min-width: 8rem" pSortableColumn="EXAMEN">EXAMEN<p-sortIcon field="EXAMEN"></p-sortIcon></th>
+							<th style="background:#FEDEB6; min-width: 8rem" pSortableColumn="DOC">DOC <p-sortIcon field="DOC"></p-sortIcon></th>
+							<th style="background:#FEDEB6; min-width: 8rem" pSortableColumn="PACIENTE">PACIENTE <p-sortIcon field="PACIENTE"></p-sortIcon></th>
+
+							<th style="background:#FCFEB6 ;min-width: 8rem" pSortableColumn="ESTADO_INICIO">ESTADO</th>
+							<th style="background:#FCFEB6 ;min-width: 8rem"  pSortableColumn="USUARIO_INICIO">USUARIO</th>
+							<th style="background:#FCFEB6 ;min-width: 8rem"  pSortableColumn="FECHA_INICIO">FECHA</th>
+							
+							<!-- <th style="min-width: 8rem" pSortableColumn="ESTADO_LECTURA">ESTADO<p-sortIcon field="nombre"></p-sortIcon></th>
+							<th style="min-width: 8rem"  pSortableColumn="ESTADO_LECTURA">USUARIO <p-sortIcon field="estado"></p-sortIcon></th>
+							<th style="min-width: 8rem"  pSortableColumn="ESTADO_LECTURA">FECHA</th> -->
+
+							<th style="background:#DEFEB6 ;min-width: 8rem" pSortableColumn="nombre">ESTADO</th>
+							<th style="background:#DEFEB6 ;min-width: 8rem"  pSortableColumn="estado">USUARIO </th>
+							<th style="background:#DEFEB6 ;min-width: 8rem"  pSortableColumn="accion">FECHA</th>
+
+							<!-- <th style="min-width: 8rem" pSortableColumn="nombre">ESTADO<p-sortIcon field="nombre"></p-sortIcon></th>
+							<th style="min-width: 8rem"  pSortableColumn="estado">USUARIO <p-sortIcon field="estado"></p-sortIcon></th>
+							<th style="min-width: 8rem"  pSortableColumn="accion">FECHA</th> -->
+							
+							<th style="background:#D5B6FE;min-width: 8rem" pSortableColumn="nombre">ESTADO</th>
+							<th style="background:#D5B6FE;min-width: 8rem"  pSortableColumn="estado">USUARIO</th>
+							<th style="background:#D5B6FE; min-width: 8rem"  pSortableColumn="accion">FECHA</th>
+		
+						</tr>
+					</ng-template>
+					<ng-template pTemplate="body" let-data>
+						<tr>
+							@if(data.estadoColortracking==0){
+								<td style="text-align:center;"><img src="../../../../assets/layout/images/tracking/circle_amarillo.png"  width="25px"  alt=""></td>
+							}@else if(data.estadoColortracking==1){
+								<td style="text-align:center;"><img src="../../../../assets/layout/images/tracking/circle_verde.png"  width="25px"  alt=""></td>
+							}@else if(data.estadoColortracking==2){
+								<td style="text-align:center;"><img src="../../../../assets/layout/images/tracking/circle_red.png"  width="25px"  alt=""></td>
+							}@else if(data.estadoColortracking==3){
+								<td style="text-align:center;"><img src="../../../../assets/layout/images/tracking/circle_plomo.png"  width="25px"  alt=""></td>
+							}
+							<td>{{data.minutosInicioValidacion}} Min de {{data.timeTrackingMin}} Min</td>
+	
+							<td>{{data.codigoOrden}}</td>		
+							<td>{{data.examenName}}</td>	
+							<td>{{data.documentoPaciente}}</td>	
+							<td>{{data.nombreCompletoPaciente}}</td>
+							@if(data.estadoImpresionEtiqueta){
+								<td style="text-align:center;"><img src="../../../../assets/layout/images/tracking/circle_verde.png" width="25px" alt=""></td>
+							}@else {
+								<td></td>
+							}
+							<td>{{data.usuarioImpresionEtiqueta}}</td>	
+							<td>{{formatDateTime(data.fechaImpresionEtiqueta)}}</td>	
+							
+							@if(data.estadoEnvioResultados){
+								<td style="text-align:center;"><img src="../../../../assets/layout/images/tracking/circle_verde.png"  width="25px"  alt=""></td>
+							}@else {
+								<td></td>
+							}
+							<td>{{data.usuarioEnvioResultados}}</td>	
+							<td>{{formatDateTime(data.fechaEnvioResultados)}}</td>	
+	
+	
+							@if(data.estadoValidacion){
+								<td style="text-align:center;"><img src="../../../../assets/layout/images/tracking/circle_verde.png"  width="25px"  alt=""></td>
+							}@else {
+								<td></td>
+							}
+							<td>{{data.usuarioValidacion}}</td>	
+							<td>{{formatDateTime(data.fechaValidacion)}}</td>
+	
+							
+					</ng-template>
+					<ng-template pTemplate="emptymessage">
+						<tr>
+							<td colspan="11">No customers found.</td>
+						</tr>
+					</ng-template>
+					<ng-template pTemplate="loadingbody">
+						<tr>
+							<td colspan="11">Loading customers data. Please wait.</td>
+						</tr>
+					</ng-template>
+				</p-table>
+            </p-sidebar>
+			
+			<p-table  *ngIf="!visibleSidebar5" #dt1 [value]="this.DataCollection" dataKey="id" [rows]="20" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+				<!-- <p-table > -->
+				<ng-template pTemplate="header">
+					<tr>
+						<th colspan="2" style="background:#D5B6FE; text-align: center ;">ESTADO</th>
+
+						<th colspan="4" style="background:#ffcb8b; text-align: center; ">DATOS PACIENTE</th>
+						<th colspan="3" style="background:#fdffa5; text-align: center; color: black ;">INICIO</th>
+						<!-- <th colspan="3">LECTURA EQUIPO MEDICO</th> -->
+						<th colspan="3" style="background:#cff99b ; text-align: center; color: black ;">ENVIO DE RESULTADOS</th>
+						<!-- <th colspan="3">PREVALIDACION</th> -->
+						<th colspan="3" style="background:#c8a4f7; text-align: center; color: black ;">VALIDACION</th>
+
+					</tr>
+					<tr>
+						<th style="background:#FEDEB6; min-width: 8rem" pSortableColumn="SEMAFORO">SEMAFORO<p-sortIcon field="SEMAFORO"></p-sortIcon></th>
+						<th style="background:#FEDEB6; min-width: 8rem" pSortableColumn="TIEMPO">TIEMPO<p-sortIcon field="TIEMPO"></p-sortIcon></th>
+
+						<th style="background:#FEDEB6; min-width: 8rem" pSortableColumn="ORDEN">ORDEN<p-sortIcon field="ORDEN"></p-sortIcon></th>
+						<th style="background:#FEDEB6; min-width: 8rem" pSortableColumn="EXAMEN">EXAMEN<p-sortIcon field="EXAMEN"></p-sortIcon></th>
+						<th style="background:#FEDEB6; min-width: 8rem" pSortableColumn="DOC">DOC <p-sortIcon field="DOC"></p-sortIcon></th>
+						<th style="background:#FEDEB6; min-width: 8rem" pSortableColumn="PACIENTE">PACIENTE <p-sortIcon field="PACIENTE"></p-sortIcon></th>
+
+
+						<th style="background:#fdffa5 ;min-width: 8rem" pSortableColumn="ESTADO_INICIO">ESTADO</th>
+						<th style="background:#fdffa5 ;min-width: 8rem"  pSortableColumn="USUARIO_INICIO">USUARIO</th>
+						<th style="background:#fdffa5 ;min-width: 8rem"  pSortableColumn="FECHA_INICIO">FECHA</th>
+						
+						<!-- <th style="min-width: 8rem" pSortableColumn="ESTADO_LECTURA">ESTADO<p-sortIcon field="nombre"></p-sortIcon></th>
+						<th style="min-width: 8rem"  pSortableColumn="ESTADO_LECTURA">USUARIO <p-sortIcon field="estado"></p-sortIcon></th>
+						<th style="min-width: 8rem"  pSortableColumn="ESTADO_LECTURA">FECHA</th> -->
+
+						<th style="background:#cff99b ;min-width: 8rem" pSortableColumn="nombre">ESTADO</th>
+						<th style="background:#cff99b ;min-width: 8rem"  pSortableColumn="estado">USUARIO </th>
+						<th style="background:#cff99b ;min-width: 8rem"  pSortableColumn="accion">FECHA</th>
+
+						<!-- <th style="min-width: 8rem" pSortableColumn="nombre">ESTADO<p-sortIcon field="nombre"></p-sortIcon></th>
+						<th style="min-width: 8rem"  pSortableColumn="estado">USUARIO <p-sortIcon field="estado"></p-sortIcon></th>
+						<th style="min-width: 8rem"  pSortableColumn="accion">FECHA</th> -->
+						
+						<th style="background:#c8a4f7;min-width: 8rem" pSortableColumn="nombre">ESTADO</th>
+						<th style="background:#c8a4f7;min-width: 8rem"  pSortableColumn="estado">USUARIO</th>
+						<th style="background:#c8a4f7; min-width: 8rem"  pSortableColumn="accion">FECHA</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-data>
+					<tr>
+						@if(data.estadoColortracking==0){
+							<td style="text-align:center;"><img src="../../../../assets/layout/images/tracking/circle_amarillo.png"  width="25px"  alt=""></td>
+						}@else if(data.estadoColortracking==1){
+							<td style="text-align:center;"><img src="../../../../assets/layout/images/tracking/circle_verde.png"  width="25px"  alt=""></td>
+						}@else if(data.estadoColortracking==2){
+							<td style="text-align:center;"><img src="../../../../assets/layout/images/tracking/circle_red.png"  width="25px"  alt=""></td>
+						}@else if(data.estadoColortracking==3){
+							<td style="text-align:center;"><img src="../../../../assets/layout/images/tracking/circle_plomo.png"  width="25px"  alt=""></td>
+						}
+						<td>{{data.minutosInicioValidacion}} Min de {{data.timeTrackingMin}} Min</td>
+						<td>{{data.codigoOrden}}</td>		
+						<td>{{data.examenName}}</td>	
+						<td>{{data.documentoPaciente}}</td>	
+						<td>{{data.nombreCompletoPaciente}}</td>
+						@if(data.estadoImpresionEtiqueta){
+							<td style="text-align:center;"><img src="../../../../assets/layout/images/tracking/circle_verde.png" width="25px" alt=""></td>
+						}@else {
+							<td></td>
+						}
+						<td>{{data.usuarioImpresionEtiqueta}}</td>	
+						<td>{{formatDateTime(data.fechaImpresionEtiqueta)}}</td>	
+						
+						@if(data.estadoEnvioResultados){
+							<td style="text-align:center;"><img src="../../../../assets/layout/images/tracking/circle_verde.png"  width="25px"  alt=""></td>
+						}@else {
+							<td></td>
+						}
+						<td>{{data.usuarioEnvioResultados}}</td>	
+						<td>{{formatDateTime(data.fechaEnvioResultados)}}</td>	
+
+
+						@if(data.estadoValidacion){
+							<td style="text-align:center;"><img src="../../../../assets/layout/images/tracking/circle_verde.png"  width="25px"  alt=""></td>
+						}@else {
+							<td></td>
+						}
+						<td>{{data.usuarioValidacion}}</td>	
+						<td>{{formatDateTime(data.fechaValidacion)}}</td>
+
+						
+						
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="11">No customers found.</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="loadingbody">
+					<tr>
+						<td colspan="11">Loading customers data. Please wait.</td>
+					</tr>
+				</ng-template>
+			</p-table>
+
+		</div>		
+	</div>
+</div>
+

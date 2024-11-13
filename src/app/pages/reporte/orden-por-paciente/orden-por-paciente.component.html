@@ -1,0 +1,128 @@
+<div class="grid">
+    <div class="col-12">
+
+		<div class="card">
+			<h5>REPORTE ORDEN DE PACIENTE</h5>
+
+            <p-toast key="tst"></p-toast>
+            <p-toolbar styleClass="mb-12">
+                <ng-template pTemplate="left">
+                </ng-template>
+
+                <ng-template pTemplate="right">
+					<button pButton pRipple label="Refrescar" icon="pi pi-refresh" class="p-button-secondary mr-2" (click)="listar()"></button>
+					<button pButton pRipple label="Buscar" icon="pi pi-search" class="p-button-warning mr-2" (click)="listar()"></button>
+                    <button pButton pRipple label="Exportar" icon="pi pi-file-excel" class="p-button-info mr-2" (click)="exportar()"></button>
+                </ng-template>
+            </p-toolbar>
+
+			<p-tabView orientation="left">
+				<p-tabPanel class="line-height-6 m-2">
+					<div class="grid p-fluid">
+						<div class="col-12 md:col-3">
+							<div class="field mt-1 space">
+								<span class="p-float-label">
+									<input
+										type="text"
+										id="inputtext"
+										pInputText										
+										maxlength="50"
+										[(ngModel)]="valor"
+										(keyup.enter)="listar()"
+									/>
+									<label for="inputtext">BUSCAR DATOS DEL PACIENTE</label>
+								</span>
+							</div>
+						</div>
+						<div class="col-12 md:col-3">
+							<div class="field mt-1 space">
+								<span class="p-float-label">
+									<p-calendar
+										inputId="calendar"
+										[(ngModel)]="fechaDesde"
+										dateFormat="dd/mm/yy" 
+									 ></p-calendar>
+									 <label for="calendar">FECHA ORDEN DESDE</label>
+								</span>
+							</div>							
+						</div>
+						<div class="col-12 md:col-3">
+							<div class="field mt-1 space">
+								<span class="p-float-label">
+									<p-calendar
+										inputId="calendar"
+										[(ngModel)]="fechaHasta"
+										dateFormat="dd/mm/yy" 
+									 ></p-calendar>
+									 <label for="calendar">FECHA ORDEN HASTA</label>
+								</span>
+							</div>
+						</div>
+					</div>
+				</p-tabPanel>
+			</p-tabView>
+
+			<p-table #dt1 [value]="datacollection" dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['name','country.name','representative.name','status']" responsiveLayout="scroll">
+				<ng-template pTemplate="header">
+					<tr>
+						<th style="min-width: 8rem" pSortableColumn="codigo">Nro Orden <p-sortIcon field="codigo"></p-sortIcon></th>
+						<th style="min-width: 10rem" pSortableColumn="nombre">Tipo Documento <p-sortIcon field="nombre"></p-sortIcon></th>
+						<th style="min-width: 10rem" pSortableColumn="nroDocumento">Nro Documento <p-sortIcon field="nroDocumento"></p-sortIcon></th>
+                        <th style="min-width: 15rem" pSortableColumn="nombre">Paciente <p-sortIcon field="nombre"></p-sortIcon></th>
+						<th style="min-width: 10rem" pSortableColumn="nombre">Abreviatura <p-sortIcon field="nombre"></p-sortIcon></th>
+						<th style="min-width: 15rem" pSortableColumn="estado">Nombre Examen <p-sortIcon field="estado"></p-sortIcon></th>
+						<th style="min-width: 8rem" pSortableColumn="estado">Resultado <p-sortIcon field="estado"></p-sortIcon></th>
+						<th style="min-width: 8rem" pSortableColumn="estado">Unidad Medida <p-sortIcon field="estado"></p-sortIcon></th>
+						<th style="min-width: 12rem" pSortableColumn="accion">Fecha Orden</th>	
+						<th style="min-width: 12rem" pSortableColumn="accion">Fecha Validacion</th>				
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-data>
+					<tr>					
+						<td>
+							<span class="image-text ml-2">{{data.nroOrden}}</span>
+						</td>
+						<td>
+							<span class="image-text ml-2">{{data.tipoDocumento}}</span>
+						</td>
+						<td>
+							<span class="image-text ml-2">{{data.nroDocumento}}</span>
+						</td>
+						<td>
+							<span class="image-text ml-2">{{data.nombreCompleto}}</span>
+						</td>									
+						<td>
+							<span class="image-text ml-2">{{data.abreviatura}}</span>
+						</td>
+						<td>
+							<span class="image-text ml-2">{{data.nombreExamen}}</span>
+						</td>
+						<td>
+							<span class="image-text ml-2">{{data.resultado}}</span>
+						</td>
+						<td>
+							<span class="image-text ml-2">{{data.unidadMedida}}</span>
+						</td>
+						<td>
+							<span class="image-text ml-2">{{data.fechaOrden}}</span>
+						</td>
+						<td>
+							<span class="image-text ml-2">{{data.fechaUsuarioValMed}}</span>
+						</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="11">No customers found.</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="loadingbody">
+					<tr>
+						<td colspan="11">Loading customers data. Please wait.</td>
+					</tr>
+				</ng-template>
+    		</p-table>
+		</div>		
+	</div>
+</div>
+

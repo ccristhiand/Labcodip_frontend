@@ -1,0 +1,270 @@
+<div [formGroup]="form" #frmGrupo="ngForm">
+    <div class="card">
+        <h5>CREAR ORDEN</h5>
+
+        <p-toast key="tst"></p-toast>
+        <p-toolbar styleClass="mb-4">
+            <ng-template pTemplate="left">
+            </ng-template>
+
+            <ng-template pTemplate="right">
+                <button pButton pRipple label="Atrás" icon="pi pi-step-backward" class="p-button-secondary mr-2" [routerLink]="['/laboratorio/orden']"></button>
+                <button *ngIf="sesion.permisoEscritura=='True'"  pButton pRipple label="Guardar" icon="pi pi-save" class="p-button-success mr-2" (click)="guardar()" [disabled]="frmGrupo.invalid" ></button>
+            </ng-template>
+        </p-toolbar>
+
+        <p-tabView orientation="left">
+            <p-tabPanel header="ORDEN" class="line-height-6 m-2">
+                <div class="grid p-fluid">
+
+                    <div class="col-12 md:col-4">
+                        <div class="field mt-3 space">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                inputId="dropdown"
+                                [autoDisplayFirst]="true"
+                                [options]="listaTipodocumento"
+                                [(ngModel)]="tipoDocu"
+                                formControlName="idTipoDocu"
+                                optionLabel="nombre"
+                                ></p-dropdown>
+                                <label for="dropdown">TIPO DOCUMENTO</label>
+                            </span>
+                        </div>
+                        <div class="field mt-3 space">
+                            <p-inputGroup>
+                            <span class="p-float-label">
+                                <input
+                                    type="text"
+                                    id="inputtext"
+                                    pInputText
+                                    formControlName="nroDocumento"
+                                    maxlength="15"
+                                    (keyup.enter)="buscarPersona()"
+                                />
+                                <label for="inputtext">NRO DOCUMENTO</label>
+                            </span>
+                            <button type="button"  (click)="buscarPersona()" pButton label="Buscar"></button>
+                        </p-inputGroup>
+                        </div>
+                        <div class="field space">
+                            <span class="p-float-label">
+                                <input
+                                    type="text"
+                                    id="inputtext"
+                                    pInputText
+                                    formControlName="apePaterno"
+                                    maxlength="50"
+                                />
+                                <label for="inputtext">APELLIDO PATERNO</label>
+                            </span>
+                        </div>
+                        <div class="field space">
+                            <span class="p-float-label">
+                                <input
+                                    type="text"
+                                    id="inputtext"
+                                    pInputText
+                                    formControlName="apeMaterno"
+                                    maxlength="50"
+                                />
+                                <label for="inputtext">APELLIDO MATERNO</label>
+                            </span>
+                        </div>
+                        <div class="field space">
+                            <span class="p-float-label">
+                                <input
+                                    type="text"
+                                    id="inputtext"
+                                    pInputText
+                                    formControlName="nombre"
+                                    maxlength="50"
+                                />
+                                <label for="inputtext">NOMBRE COMPLETO</label>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 md:col-4">
+                        <div class="field mt-3 space">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                    inputId="dropdown"
+                                    [autoDisplayFirst]="false"
+                                    [options]="listaSexo"
+                                    [(ngModel)]="sexo"
+                                    formControlName="idSexo"
+                                    optionLabel="nombre"
+                                    ></p-dropdown>
+                                    <label for="dropdown">SEXO</label>
+                            </span>
+                        </div>
+                        <div class="field space">
+                            <span class="p-float-label">
+                                <p-calendar
+                                    inputId="calendar"
+                                    formControlName="fechaNacimiento"
+                                    dateFormat="dd/mm/yy"
+                                 ></p-calendar>
+                                 <label for="calendar">FECHA NACIMIENTO</label>
+                            </span>
+                        </div>
+                        <div class="field space">
+                            <span class="p-float-label">
+                                <input
+                                    type="text"
+                                    id="inputtext"
+                                    pInputText
+                                    formControlName="edad"
+                                    maxlength="2"
+                                />
+                                <label for="inputtext">EDAD</label>
+                            </span>
+                        </div>
+                        <div class="field space">
+                            <span class="p-float-label">
+                                <input
+                                    type="text"
+                                    id="inputtext"
+                                    pInputText
+                                    formControlName="historiaClinica"
+                                    maxlength="10"
+                                />
+                                <label for="inputtext">HISTORIA CLINICA</label>
+                            </span>
+                        </div>
+                        <div class="field space">
+                            <span class="p-float-label">
+                                <input
+                                    type="text"
+                                    id="inputtext"
+                                    pInputText
+                                    formControlName="nroAtencion"
+                                    maxlength="10"
+                                />
+                                <label for="inputtext">N° ATENCIÓN</label>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 md:col-4">
+                        <div class="field mt-3 space">
+                            <span class="p-float-label">
+                                <p-calendar
+                                    inputId="calendar"
+                                    formControlName="fechaOrden"
+                                ></p-calendar>
+                                <label for="calendar">FECHA ORDEN</label>
+                            </span>
+                        </div>
+                        <div class="field space">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                inputId="dropdown"
+                                [autoDisplayFirst]="true"
+                                [options]="listaProcedencia"
+                                [(ngModel)]="procedencia"
+                                formControlName="idProcedencia"
+                                optionLabel="nombre"
+                                ></p-dropdown>
+                                <label for="dropdown">PROCEDENCIA</label>
+                            </span>
+                        </div>
+                        <div class="field space">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                inputId="dropdown"
+                                [autoDisplayFirst]="true"
+                                [options]="listaServicio"
+                                [(ngModel)]="servicio"
+                                formControlName="idServicio"
+                                optionLabel="nombre"
+                                ></p-dropdown>
+                                <label for="dropdown">SERVICIO</label>
+                            </span>
+                        </div>
+                        <div class="field space">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                inputId="dropdown"
+                                [autoDisplayFirst]="true"
+                                [options]="listaMedico"
+                                [(ngModel)]="medico"
+                                formControlName="idMedico"
+                                optionLabel="nombre"
+                                ></p-dropdown>
+                                <label for="dropdown">MEDICO</label>
+                            </span>
+                        </div>
+                        <div class="field space">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                inputId="dropdown"
+                                [autoDisplayFirst]="true"
+                                [options]="listaOrigen"
+                                [(ngModel)]="origen"
+                                formControlName="idOrigen"
+                                optionLabel="nombre"
+                                ></p-dropdown>
+                                <label for="dropdown">ORIGEN</label>
+                            </span>
+                        </div>
+                        <div class="field space">
+                            <span class="p-float-label">
+                                <input
+                                    type="text"
+                                    id="inputtext"
+                                    pInputText
+                                    formControlName="cama"
+                                    maxlength="20"
+                                />
+                                <label for="inputtext">CAMA</label>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="EXAMENES" class="line-height-3 m-0">
+                <div class="grid p-fluid">
+                    <div class="col-12 md:col-4" style="margin: 0 0 -25px 0;">
+                        <div class="field mt-1 space">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                inputId="dropdown"
+                                [autoDisplayFirst]="true"
+                                [options]="listaArea"
+                                [(ngModel)]="area"
+                                formControlName="idArea"
+                                optionLabel="nombre"
+                                (onChange)="buscarExamen()"
+                                ></p-dropdown>
+                                <label for="dropdown">AREA</label>
+                            </span>
+                        </div>
+                    </div>
+
+                   <div class="col-12 md:col-12" >
+                    <h5>PERFILES</h5>
+                        <p-toolbar styleClass="mb-4" >
+                            <ng-template pTemplate="right" >
+                                <div class="field-checkbox mr-2" *ngFor="let item of Perfiles">
+                                    <p-checkbox [inputId]="item.idPerfil" name="group" [value]="item" (onChange)="seleccionarPerfil(item)" [disabled]="area.id!='TODOS'"></p-checkbox>
+                                    <label [for]="item.idPerfil">{{item.nombre}}</label>
+                                </div>
+                            </ng-template>
+                            
+                        </p-toolbar>
+                    </div>
+
+                    <div *ngFor="let item of listaExamenes" class="col-6 mb-2 md:col-2">
+                        <p-toggleButton (onChange)="sleccionarExamen(item)" *ngIf="item.color=='' && item.resultado==null" [style]="{background:''}" onLabel="{{item.abreviatura}}" offLabel="{{item.abreviatura}}"></p-toggleButton>
+                        <p-toggleButton (onChange)="sleccionarExamen(item)" *ngIf="item.color!='' && item.resultado==null" [style]="{background:'#e931b1'}" onLabel="{{item.abreviatura}}" offLabel="{{item.abreviatura}}"></p-toggleButton>
+                        <p-toggleButton (onChange)="sleccionarExamen(item)" *ngIf="item.color!='' && item.resultado!=null" [style]="{background:'#e931b1'}" [disabled]="true" onLabel="{{item.abreviatura}}" offLabel="{{item.abreviatura}}"></p-toggleButton>
+                    </div>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+
+    </div>
+</div>

@@ -1,0 +1,305 @@
+<div class="grid">
+    <div class="col-12">
+		<div class="card">
+			<h5>LISTADOS DE ORDENES</h5>
+
+			<p-toast key="tst"></p-toast>
+            <p-toolbar styleClass="mb-12">
+                <ng-template pTemplate="left">
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <button pButton pRipple label="Refrescar" icon="pi pi-refresh" class="p-button-secondary mr-2" (click)="listar()"></button>
+					<button pButton pRipple label="Buscar" icon="pi pi-search" class="p-button-warning mr-2" (click)="listar()"></button>
+					<button *ngIf="sesion.permisoEscritura=='True'" pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2" [routerLink]="['/laboratorio/orden/crear']"></button>
+					<button *ngIf="btnValidar" pButton pRipple label="Pre. Validación" icon="pi pi-check-circle" class="p-button-primary mr-2" (click)="preValidar()"></button>
+					<button *ngIf="btnValidar" pButton pRipple label="Val. Médico" icon="pi pi-check" class="p-button-info mr-2" (click)="validar()"></button>
+					<button pButton pRipple label="Etiqueta" icon="pi pi-qrcode" class="p-button-info mr-2" (click)="valTipoMuestra()"></button>
+				</ng-template>
+            </p-toolbar>
+
+			<p-tabView orientation="left">
+				<p-tabPanel class="line-height-6 m-2">
+					<div class="grid p-fluid">
+						<div class="col-12 md:col-3">
+							<div class="field mt-1 space">
+								<span class="p-float-label">
+									<p-dropdown
+									inputId="dropdown"
+									[autoDisplayFirst]="true"
+									[options]="listaTipo"
+									[(ngModel)]="tipo"
+									optionLabel="nombre"
+									(onChange)="listar()"
+									></p-dropdown>
+									<label for="dropdown">TIPO</label>
+								</span>
+							</div>
+							<div class="field mt-1 space">
+								<span class="p-float-label">
+									<p-dropdown
+									inputId="dropdown"
+									[autoDisplayFirst]="true"
+									[options]="listaEstado"
+									[(ngModel)]="estado"
+									optionLabel="nombre"
+									(onChange)="listar()"
+									></p-dropdown>
+									<label for="dropdown">ESTADO</label>
+								</span>
+							</div>
+						</div>
+						<div class="col-12 md:col-3">
+							<div class="field mt-1 space">
+								<span class="p-float-label">
+									<p-dropdown
+									inputId="dropdown"
+									[autoDisplayFirst]="true"
+									[options]="listaLaboratorio"
+									[(ngModel)]="laboratorio"
+									optionLabel="nombre"
+									></p-dropdown>
+									<label for="dropdown">LABORATORIO</label>
+								</span>
+							</div>
+							<div class="field mt-1 space">
+								<span class="p-float-label">
+									<p-dropdown
+									inputId="dropdown"
+									[autoDisplayFirst]="true"
+									[options]="listaArea"
+									[(ngModel)]="area"
+									optionLabel="nombre"
+									></p-dropdown>
+									<label for="dropdown">AREA</label>
+								</span>
+							</div>
+						</div>
+						<div class="col-12 md:col-3">
+							<div class="field mt-1 space">
+								<span class="p-float-label">
+									<p-calendar
+										inputId="calendar"
+										[(ngModel)]="fechaDesde"
+										dateFormat="dd/mm/yy" 
+									 > </p-calendar>
+									 <label for="calendar">FECHA DESDE</label>
+								</span>
+							</div>
+							<div class="field mt-1 space">
+								<span class="p-float-label">
+									<p-calendar
+										inputId="calendar"
+										[(ngModel)]="fechaHasta"
+										dateFormat="dd/mm/yy"
+									 ></p-calendar>
+									 <label for="calendar">FECHA HASTA</label>
+								</span>
+							</div>
+						</div>
+						<div class="col-12 md:col-3">
+							<div class="field mt-1 space">
+								<span class="p-float-label">
+									<input
+										type="text"
+										id="inputtext"
+										pInputText										
+										maxlength="50"
+										[(ngModel)]="valor"
+									/>
+									<label for="inputtext">BUSCAR ORDEN</label>
+								</span>
+							</div>
+						</div>
+					</div>
+				</p-tabPanel>
+			</p-tabView>
+
+			<p-table #dt1 [value]="datacollection" dataKey="id" [rows]="1000" [loading]="loading" [rowHover]="true" *ngIf="porOrden" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['name','country.name','representative.name','status']" responsiveLayout="scroll">
+				<ng-template pTemplate="header">
+					<tr>
+						<th style="min-width: 2rem"></th>
+						<th style="min-width: 9rem" pSortableColumn="nroDocumento">Estado <p-sortIcon field="nroDocumento"></p-sortIcon></th>
+						<th style="min-width: 7rem" pSortableColumn="codigo">Orden <p-sortIcon field="codigo"></p-sortIcon></th>
+						<th style="min-width: 9rem" pSortableColumn="userName">N° Atencion <p-sortIcon field="userName"></p-sortIcon></th>
+						<th style="min-width: 8rem" pSortableColumn="nombre">F.Orden <p-sortIcon field="nombre"></p-sortIcon></th>
+						<th style="min-width: 9rem" pSortableColumn="estado">Documento <p-sortIcon field="estado"></p-sortIcon></th>
+						<th style="min-width: 12rem" pSortableColumn="estado">Datos <p-sortIcon field="estado"></p-sortIcon></th>
+						<th style="min-width: 7rem" pSortableColumn="estado">Sexo <p-sortIcon field="estado"></p-sortIcon></th>
+						<th style="min-width: 12rem" pSortableColumn="estado">Procedencia <p-sortIcon field="estado"></p-sortIcon></th>
+						<th style="min-width: 12rem" pSortableColumn="estado">Medico <p-sortIcon field="estado"></p-sortIcon></th>
+						<th style="min-width: 12rem" pSortableColumn="estado">Servicio <p-sortIcon field="estado"></p-sortIcon></th>
+						<th style="min-width: 8rem" pSortableColumn="accion">Acciones</th>				
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-orden>
+					<tr>
+						<td>
+							<p-checkbox name="group1" value="{{orden.idOrden}}" [(ngModel)]="valCheck" id="{{orden.idOrden}}"></p-checkbox>
+						</td>
+						<td>
+							<span [class]="'customer-badge status-' + orden.color">{{orden.estado}}</span>
+						</td>
+						<td>
+							{{orden.nroOrden}}
+						</td>
+						<td>
+							<span class="image-text ml-2">{{orden.nroAtencion}}</span>
+						</td>
+						<td>
+							<span class="image-text ml-2">{{orden.strFechaOrden}}</span>
+						</td>					
+						<td>
+							<span class="image-text ml-2">{{orden.nroDocumento}}</span>
+						</td>
+						<td>
+							<span class="image-text ml-2">{{orden.nombreCompleto}}</span>
+						</td>
+						<td>
+							<span class="image-text ml-2">{{orden.idSexo}}</span>
+						</td>
+						<td>
+							<span class="image-text ml-2">{{orden.idProcedencia}}</span>
+						</td>
+						<td>
+							<span class="image-text ml-2">{{orden.idMedico}}</span>
+						</td>
+						<td>
+							<span class="image-text ml-2">{{orden.idServicio}}</span>
+						</td>						
+						<td>
+                            <div class="flex flex-wrap gap-2">
+                                <button *ngIf="sesion.permisoEscritura=='True'" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" [routerLink]="['/laboratorio/orden/edit/'+ orden.idOrden]"></button>
+								<button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-info mr-2" [routerLink]="['/laboratorio/orden/validar/'+ orden.idOrden]"></button>							
+                            </div>
+                        </td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="13">No customers found.</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="loadingbody">
+					<tr>
+						<td colspan="13">Loading customers data. Please wait.</td>
+					</tr>
+				</ng-template>
+    		</p-table>
+
+			<p-table #dt1 [value]="datacollection" dataKey="id" [rows]="1000" [loading]="loading" [rowHover]="true" *ngIf="!porOrden"  styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['name','country.name','representative.name','status']" responsiveLayout="scroll">
+				<ng-template pTemplate="header">
+					<tr>
+						<th style="min-width: 2rem">
+							<p-checkbox name="group2" value="" [(ngModel)]="valCheck2" id="" (click)="marcarOrden()"></p-checkbox>
+						</th>
+						<th style="min-width: 9rem" pSortableColumn="nroDocumento">Estado <p-sortIcon field="nroDocumento"></p-sortIcon></th>
+						<th style="min-width: 7rem" pSortableColumn="codigo">Orden <p-sortIcon field="codigo"></p-sortIcon></th>
+						<th style="min-width: 9rem" pSortableColumn="userName">N° Atencion <p-sortIcon field="userName"></p-sortIcon></th>						
+						<th style="min-width: 9rem" pSortableColumn="nombre">F.Orden <p-sortIcon field="nombre"></p-sortIcon></th>
+						<th style="min-width: 9rem" pSortableColumn="nombre">F.Resultado <p-sortIcon field="nombre"></p-sortIcon></th>
+						<th style="min-width: 9rem" pSortableColumn="estado">Documento <p-sortIcon field="estado"></p-sortIcon></th>
+						<th style="min-width: 12rem" pSortableColumn="estado">Datos <p-sortIcon field="estado"></p-sortIcon></th>									
+						<th style="min-width: 7rem" pSortableColumn="estado">Sexo <p-sortIcon field="estado"></p-sortIcon></th>
+						<th style="min-width: 10rem" pSortableColumn="estado">Examen <p-sortIcon field="estado"></p-sortIcon></th>
+						<th style="min-width: 8rem" pSortableColumn="estado">Resultado <p-sortIcon field="estado"></p-sortIcon></th>
+						<th style="min-width: 7rem" pSortableColumn="estado">U. Medi. <p-sortIcon field="estado"></p-sortIcon></th>
+						<th style="min-width: 9rem" pSortableColumn="accion">Acciones</th>				
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-orden>
+					<tr>
+						<td>
+							<p-checkbox name="group1" value="{{orden.idOrden}}" [(ngModel)]="valCheck" id="{{orden.idOrden}}"></p-checkbox>
+						</td>
+						<td>
+							<span [class]="'customer-badge status-' + orden.color">{{orden.estado}}</span>
+						</td>
+						<td>
+							{{orden.nroOrden}}
+						</td>
+						<td>
+							<span class="image-text ml-2">{{orden.nroAtencion}}</span>
+						</td>
+						<td>
+							<span class="image-text ml-2">{{orden.strFechaOrden}}</span>
+						</td>
+						<td>
+							<span class="image-text ml-2">{{orden.strFechaResultado}}</span>
+						</td>					
+						<td>
+							<span class="image-text ml-2">{{orden.nroDocumento}}</span>
+						</td>
+						<td>
+							<span class="image-text ml-2">{{orden.nombreCompleto}}</span>
+						</td>
+						<td>
+							<span class="image-text ml-2">{{orden.idSexo}}</span>
+						</td>
+						<td>
+							<span class="image-text ml-2">{{orden.examen}}</span>
+						</td>
+						<td>
+							<span class="image-text ml-2">{{orden.resultado}}</span>
+						</td>
+						<td>
+							<span class="image-text ml-2">{{orden.unidadMedida}}</span>
+						</td>						
+						<td>
+                            <div class="flex flex-wrap gap-2">
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" [routerLink]="['/laboratorio/orden/edit/'+ orden.idOrden]"></button>
+								<button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-info mr-2" [routerLink]="['/laboratorio/orden/validar/'+ orden.idOrden]"></button>
+                            </div>
+                        </td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="12">No customers found.</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="loadingbody">
+					<tr>
+						<td colspan="12">Loading customers data. Please wait.</td>
+					</tr>
+				</ng-template>
+    		</p-table>
+		</div>
+
+		<div [formGroup]="form" #frmGrupo="ngForm">
+            <p-dialog [(visible)]="tipoMuestraDialog" [style]="{width: '500px'}" header="IMPRIMIR ETIQUETA" [modal]="true" class="p-fluid">
+                <ng-template pTemplate="content">
+                    <div class="grid p-fluid">
+                        <div class="col-12 md:col-6">
+                            <div class="field mt-1 space">
+								<label style="color: #868C9B;">TIPO MUESTRA</label>
+								<p-tree [value]="listaTipoMuestra" selectionMode="checkbox" [(selection)]="tipoMuestra"></p-tree>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6">    
+                            <div class="field mt-4 space">
+                                <span class="p-float-label">
+                                    <p-dropdown
+                                    inputId="dropdown"
+                                    [autoDisplayFirst]="true"
+                                    [options]="listaEquipoMedico"
+                                    [(ngModel)]="equipoMedico"
+                                    formControlName="idEquipoMedico"
+                                    optionLabel="nombre"
+                                    ></p-dropdown>
+                                    <label for="dropdown">EQUIPO MEDICO</label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+    
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="cerrar()"></button>
+                    <button pButton pRipple label="Imprimir" icon="pi pi-check" class="p-button-text" (click)="imprimirEtiqueta(false)" [disabled]="frmGrupo.invalid"></button>
+                </ng-template>
+            </p-dialog>
+        </div>
+
+	</div>
+</div>

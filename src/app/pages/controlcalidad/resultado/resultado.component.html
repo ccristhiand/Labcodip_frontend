@@ -1,0 +1,308 @@
+<div>
+	<div class="card">
+		<h5>RESULTADO CONTROL CALIDAD</h5>
+
+		<p-toast key="tst"></p-toast>
+		<p-toolbar styleClass="mb-4">
+			<ng-template pTemplate="left">
+			</ng-template>
+
+			<ng-template pTemplate="right">
+				<button pButton pRipple label="Buscar" icon="pi pi-search" class="p-button-warning mr-2" (click)="listarResultados()"></button>
+			</ng-template>
+		</p-toolbar>
+
+		<div class="grid p-fluid">
+			<div class="col-12 md:col-3">
+				<div class="field mt-1 space">
+					<span class="p-float-label">
+						<p-dropdown
+						inputId="dropdown"
+						[autoDisplayFirst]="true"
+						[options]="listaLaboratorio"
+						[(ngModel)]="laboratorio"
+						optionLabel="nombre"
+						></p-dropdown>
+						<label for="dropdown">LABORATORIO</label>
+					</span>
+				</div>
+				<div class="field mt-1 space">
+					<span class="p-float-label">
+						<p-dropdown
+						inputId="dropdown"
+						[autoDisplayFirst]="true"
+						[options]="listaArea"
+						[(ngModel)]="area"
+						optionLabel="nombre"
+						(onChange)="filtrarontrol()"
+						></p-dropdown>
+						<label for="dropdown">AREA</label>
+					</span>
+				</div>
+			</div>
+			<div class="col-12 md:col-3">
+				<div class="field mt-1 space">
+					<span class="p-float-label">
+						<p-dropdown
+						inputId="dropdown"
+						[autoDisplayFirst]="true"
+						[options]="listaControl"
+						[(ngModel)]="control"
+						optionLabel="nombre"
+						(onChange)="filtrarExamen()"
+						></p-dropdown>
+						<label for="dropdown">CONTROL</label>
+					</span>
+				</div>
+				<div class="field mt-1 space">
+					<span class="p-float-label">
+						<p-dropdown
+						inputId="dropdown"
+						[autoDisplayFirst]="true"
+						[options]="listaExamen"
+						[(ngModel)]="examen"
+						optionLabel="nombre"
+						(onChange)="listarResultados()"
+						></p-dropdown>
+						<label for="dropdown">EXAMEN</label>
+					</span>
+				</div>
+			</div>
+			<div class="col-12 md:col-3">
+				<div class="field mt-1 space">
+					<span class="p-float-label">
+						<p-dropdown
+						inputId="dropdown"
+						[autoDisplayFirst]="true"
+						[options]="listaLote"
+						[(ngModel)]="lote"
+						optionLabel="nombre"
+						(onChange)="listarResultados()"
+						></p-dropdown>
+						<label for="dropdown">LOTE</label>
+					</span>
+				</div>
+				<div class="field mt-1 space">
+					<span class="p-float-label">
+						<p-dropdown
+						inputId="dropdown"
+						[autoDisplayFirst]="true"
+						[options]="listaNivel"
+						[(ngModel)]="nivel"
+						optionLabel="nombre"
+						(onChange)="listarResultados()"
+						></p-dropdown>
+						<label for="dropdown">NIVEL</label>
+					</span>
+				</div>
+			</div>
+			<div class="col-12 md:col-3">
+				<div class="field mt-1 space">
+					<span class="p-float-label">
+						<p-calendar
+							inputId="calendar"
+							[(ngModel)]="fechaDesde"
+							dateFormat="dd/mm/yy"
+						 ></p-calendar>
+						 <label for="calendar">FECHA DESDE</label>
+					</span>
+				</div>
+				<div class="field mt-1 space">
+					<span class="p-float-label">
+						<p-calendar
+							inputId="calendar"
+							[(ngModel)]="fechaHasta"
+							dateFormat="dd/mm/yy"
+						 ></p-calendar>
+						 <label for="calendar">FECHA HASTA</label>
+					</span>
+				</div>
+			</div>
+		</div>
+
+		<p-tabView orientation="left">
+			<p-tabPanel header="WESTGARD POR Labcodip" class="line-height-6 m-2 listarResultados">
+				<div class="grid p-fluid">
+
+					<div class="col-12 md:col-2">
+						<div class="field mt-3">
+							<div class="card">
+								<div class="timeline-content pb-3">
+									<p-timeline *ngIf="timelineEventsSilac.length>0" [value]="timelineEventsSilac" styleClass="custom-timeline py-0 px-1">
+										<ng-template pTemplate="marker" let-event>
+											<span
+												class="custom-marker border-circle p-1 w-2rem h-2rem flex justify-content-center align-items-center"
+												[style.backgroundColor]="event.iconColor">
+												<i [ngClass]="event.icon"></i>
+											</span>
+										</ng-template>
+										<ng-template pTemplate="content" let-event>
+											<div class="flex align-items-center justify-content-between">
+												<p class="m-0">{{ event.transaction }}</p>
+												<h6 class="m-0" [style.color]="event.amountColor">
+													{{ event.amount }}
+												</h6>
+											</div>
+											<span class="text-sm text-color-secondary">{{ event.date }}</span>
+										</ng-template>
+									</p-timeline>
+									<span *ngIf="timelineEventsSilac.length==0">No se encontraron registro</span>
+								</div>
+                            </div>
+						</div>
+					</div>
+
+					<div class="col-12 md:col-8">
+						<div class="field mt-3">
+							<div class="card">
+                                <div class="graph">
+									<p-chart *ngIf="datacollection.length>0" type="line" [data]="lineDataSilac" [options]="lineOptionsSilac"></p-chart>
+									<span *ngIf="datacollection.length==0">No se encontraron registro</span>
+                                </div>
+                            </div>
+						</div>
+					</div>
+
+					<div class="col-12 md:col-2">
+						<div class="field mt-3">
+							<div class="field mt-1 space" style="display: flex;">
+								<span class="p-float-label">
+									<input style="width: 115px; margin: 0 16px 0 0;"
+										type="text"
+										id="inputtext2"
+										pInputText
+										maxlength="10"
+										[(ngModel)]="resultado"
+									/>
+									<label for="inputtext">RESULTADO</label>
+								</span>
+								<button pButton pRipple label="Guardar" icon="pi pi-save" class="p-button-success mr-2" (click)="guardar()"></button>
+
+							</div>
+							<p-table #dt1 [value]="datacollection" dataKey="id" [rows]="15" [rowHover]="true"  [paginator]="true" styleClass="p-datatable-gridlines"  responsiveLayout="scroll">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th style="min-width: 2rem" pSortableColumn="nroDocumento">Valor <p-sortIcon field="nroDocumento"></p-sortIcon></th>
+										<th style="min-width: 2rem" pSortableColumn="userName">Fecha <p-sortIcon field="userName"></p-sortIcon></th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-data>
+                                    <tr>
+                                        <td>
+                                            {{data.resultado}}
+                                        </td>
+                                        <td>
+                                            {{data.strFechaResultado}}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage">
+                                    <tr>
+                                        <td colspan="3">No se encontraron registro.</td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="loadingbody">
+                                    <tr>
+                                        <td colspan="3">Loading customers data. Please wait.</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+						</div>
+					</div>
+
+				</div>
+			</p-tabPanel>
+			<p-tabPanel header="WESTGARD POR EQ.M" class="line-height-3 m-0">
+				<div class="grid p-fluid">
+
+					<div class="col-12 md:col-2">
+						<div class="field mt-3">
+							<div class="card">
+								<div class="timeline-content pb-3">
+									<p-timeline *ngIf="timelineEventsEquipo.length>0" [value]="timelineEventsEquipo" styleClass="custom-timeline py-0 px-1">
+										<ng-template pTemplate="marker" let-event>
+											<span
+												class="custom-marker border-circle p-1 w-2rem h-2rem flex justify-content-center align-items-center"
+												[style.backgroundColor]="event.iconColor">
+												<i [ngClass]="event.icon"></i>
+											</span>
+										</ng-template>
+										<ng-template pTemplate="content" let-event>
+											<div class="flex align-items-center justify-content-between">
+												<p class="m-0">{{ event.transaction }}</p>
+												<h6 class="m-0" [style.color]="event.amountColor">
+													{{ event.amount }}
+												</h6>
+											</div>
+											<span class="text-sm text-color-secondary">{{ event.date }}</span>
+										</ng-template>
+									</p-timeline>
+									<span *ngIf="timelineEventsEquipo.length==0">No se encontraron registro</span>
+								</div>
+                            </div>
+						</div>
+					</div>
+
+					<div class="col-12 md:col-8">
+						<div class="field mt-3">
+							<div class="card">
+                                <div class="graph">
+									<p-chart *ngIf="datacollection.length>0" type="line" [data]="lineDataEquipo" [options]="lineOptionsEquipo"></p-chart>
+									<span *ngIf="datacollection.length==0">No se encontraron registro</span>
+                                </div>
+                            </div>
+						</div>
+					</div>
+
+					<div class="col-12 md:col-2">
+						<div class="field mt-3">
+							<div class="field mt-1 space" style="display: flex;">
+								<span class="p-float-label">
+									<input style="width: 115px; margin: 0 16px 0 0;"
+										type="text"
+										id="inputtext2"
+										pInputText
+										maxlength="10"
+										[(ngModel)]="resultado"
+									/>
+									<label for="inputtext">RESULTADO</label>
+								</span>
+								<button pButton pRipple label="Guardar" icon="pi pi-save" class="p-button-success mr-2" (click)="guardar()"></button>
+
+							</div>
+							<p-table #dt1 [value]="datacollection" dataKey="id" [rows]="15" [rowHover]="true"  [paginator]="true" styleClass="p-datatable-gridlines"  responsiveLayout="scroll">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th style="min-width: 2rem" pSortableColumn="nroDocumento">Valor <p-sortIcon field="nroDocumento"></p-sortIcon></th>
+										<th style="min-width: 2rem" pSortableColumn="userName">Fecha <p-sortIcon field="userName"></p-sortIcon></th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-data>
+                                    <tr>
+                                        <td>
+                                            {{data.resultado}}
+                                        </td>
+                                        <td>
+                                            {{data.strFechaResultado}}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage">
+                                    <tr>
+                                        <td colspan="3">No se encontraron registro.</td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="loadingbody">
+                                    <tr>
+                                        <td colspan="3">Loading customers data. Please wait.</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+						</div>
+					</div>
+				</div>
+
+			</p-tabPanel>
+		</p-tabView>
+	</div>
+	</div>

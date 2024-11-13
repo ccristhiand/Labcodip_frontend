@@ -1,0 +1,80 @@
+.file-input-container {
+    background-color: #2a2a38;
+    border: 1px solid #444;
+    padding: 20px;
+    border-radius: 8px;
+    width: 600px;
+    margin: 50px auto;
+  }
+  
+  .file-input-buttons {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .file-input-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    background-color: #ff00ff;
+    color: white;
+    border: 2px solid #000000;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  .file-input-button:hover {
+    background-color: #ff4dff;
+  }
+  
+  .file-input {
+    display: none;
+  }
+  
+  .file-preview {
+    display: flex;
+    align-items: center;
+    background-color: #333;
+    border: 1px solid #555;
+    padding: 10px;
+    border-radius: 8px;
+  }
+  
+  .file-preview img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 15px;
+  }
+  
+  .file-details {
+    flex-grow: 1;
+  }
+  
+  .file-name {
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+  
+  .file-size {
+    font-size: 12px;
+    color: #ccc;
+  }
+  
+  .file-remove-button {
+    background-color: #ff00ff;
+    color: white;
+    border: 2px solid #000000;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 5px;
+  }
+  
+  .file-remove-button:hover {
+    background-color: #ff4dff;
+  }

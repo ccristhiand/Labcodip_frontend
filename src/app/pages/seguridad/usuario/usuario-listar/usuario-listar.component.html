@@ -1,0 +1,74 @@
+<div class="grid">
+    <div class="col-12">
+		<div class="card">
+			<h5>LISTADOS DE USUARIOS</h5>
+
+			<p-toast key="tst"></p-toast>
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" placeholder="Search..."  class="w-full sm:w-auto"/>
+                        </span>
+					</div>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <button pButton pRipple label="Refrescar" icon="pi pi-refresh" class="p-button-secondary mr-2" [routerLink]="['/seguridad/usuario']"></button>
+                    <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2" [routerLink]="['/seguridad/usuario/crear']"></button>
+                </ng-template>
+            </p-toolbar>
+
+			<p-table #dt1 [value]="datacollection" dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['name','country.name','representative.name','status']" responsiveLayout="scroll">
+				<ng-template pTemplate="header">
+					<tr>
+						<th style="min-width: 12rem" pSortableColumn="codigo">Codigo <p-sortIcon field="codigo"></p-sortIcon></th>
+						<th style="min-width: 12rem" pSortableColumn="userName">Usuario <p-sortIcon field="userName"></p-sortIcon></th>
+						<th style="min-width: 12rem" pSortableColumn="nombre">Datos <p-sortIcon field="nombre"></p-sortIcon></th>
+						<th style="min-width: 12rem" pSortableColumn="nroDocumento">Nro Documento <p-sortIcon field="nroDocumento"></p-sortIcon></th>
+						<th style="min-width: 12rem" pSortableColumn="estado">Estado <p-sortIcon field="estado"></p-sortIcon></th>
+						<th style="min-width: 12rem" pSortableColumn="accion">Acciones</th>				
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-usuario>
+					<tr>
+						<td>
+							{{usuario.codigo}}
+						</td>
+						<td>
+							<span class="image-text ml-2">{{usuario.userName}}</span>
+						</td>
+						<td>
+							<span class="image-text ml-2">{{usuario.nombreCompleto}}</span>
+						</td>					
+						<td>
+							<span class="image-text ml-2">{{usuario.nroDocumento}}</span>
+						</td>
+						<td style="min-width: 200px;">
+							<span [class]="'customer-badge status-' + usuario.color">{{usuario.estado}}</span>
+						</td>
+						<td>
+                            <div class="flex flex-wrap gap-2">
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" [routerLink]="['/seguridad/usuario/edit', usuario.idUsuario,true]"></button>
+								<button *ngIf="usuario.estado=='DESACTIVADO' || usuario.estado=='ELIMINADO'" pButton pRipple icon="pi pi-check" class="p-button-rounded p-button-warning  mr-2"></button>
+								<button *ngIf="usuario.estado=='ACTIVO'" pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-danger"></button>
+                            </div>
+                        </td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="8">No customers found.</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="loadingbody">
+					<tr>
+						<td colspan="8">Loading customers data. Please wait.</td>
+					</tr>
+				</ng-template>
+    		</p-table>
+		</div>
+
+	</div>
+</div>

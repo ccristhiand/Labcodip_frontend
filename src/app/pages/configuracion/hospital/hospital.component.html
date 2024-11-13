@@ -1,0 +1,98 @@
+<div [formGroup]="form" #frmGrupo="ngForm">
+    <div class="card">
+        <h5>{{formTitulo}}</h5>
+        
+        <p-toast key="tst"></p-toast>
+        <p-toolbar styleClass="mb-4">
+            <ng-template pTemplate="left">
+            </ng-template>
+    
+            <ng-template pTemplate="right">
+                <button pButton pRipple label="Guardar" icon="pi pi-save" class="p-button-success mr-2" (click)="guardar()" [disabled]="frmGrupo.invalid" ></button>
+            </ng-template>
+        </p-toolbar>
+        
+            <div class="grid p-fluid">
+
+                <div class="col-12 md:col-6">
+                    <div class="field mt-3 space">
+                        <span class="p-float-label">
+                            <input
+                                type="text"
+                                id="inputtext"
+                                pInputText
+                                formControlName="codigoHospital"
+                                maxlength="5"
+                            />
+                            <label for="inputtext">CODIGO</label>
+                        </span>
+                    </div>
+                    <div class="field space">
+                        <span class="p-float-label">
+                            <input
+                                type="text"
+                                id="inputtext"
+                                pInputText
+                                formControlName="nombre"
+                                maxlength="50"
+                            />
+                            <label for="inputtext">NOMBRE</label>
+                        </span>
+                    </div>
+                    <div class="field space">
+                        <span class="p-float-label">
+                            <input
+                                type="text"
+                                id="inputtext"
+                                pInputText
+                                formControlName="direccion"
+                                maxlength="200"
+                            />
+                            <label for="inputtext">DIRECCIÓN</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-12 md:col-6">
+                    <div class="field mt-3 space">
+                        <span class="p-float-label">
+                            <input
+                                type="text"
+                                id="inputtext"
+                                pInputText
+                                formControlName="titulo"
+                                maxlength="200"
+                            />
+                            <label for="inputtext">TITULO</label>
+                        </span>
+                    </div>
+                    <div class="field space">
+                        <span class="p-float-label">
+                            <input
+                                type="text"
+                                id="inputtext"
+                                pInputText
+                                formControlName="subTitulo"
+                                maxlength="200"
+                            />
+                            <label for="inputtext">SUB TITULO</label>
+                        </span>
+                    </div>
+                    <div class="field space">
+                        <span class="p-float-label">
+                            <input
+                                type="text"
+                                id="inputtext"
+                                pInputText
+                                formControlName="piePagina"
+                                maxlength="200"
+                            />
+                            <label for="inputtext">PIE PAGINA</label>
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        
+    </div>
+</div>
+    

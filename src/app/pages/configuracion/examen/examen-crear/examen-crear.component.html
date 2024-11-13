@@ -1,0 +1,468 @@
+<div [formGroup]="form" #frmGrupo="ngForm">
+    <div class="card">
+        <h5>{{formTitulo}}</h5>
+        <p-toast key="tst"></p-toast>
+        <p-toolbar styleClass="mb-4">
+            <ng-template pTemplate="left">
+            </ng-template>
+    
+            <ng-template pTemplate="right">
+                <button pButton pRipple label="Atrás" icon="pi pi-step-backward" class="p-button-secondary mr-2" [routerLink]="['/configuracion/examenes']"></button>
+                <button pButton pRipple label="Guardar" icon="pi pi-save" class="p-button-success mr-2" (click)="guardar()" [disabled]="frmGrupo.invalid" ></button>
+            </ng-template>
+        </p-toolbar>
+        
+        <p-tabView orientation="left">
+            <p-tabPanel header="EXAMEN" class="line-height-6 m-2">
+                <div class="grid p-fluid">
+    
+                    <div class="col-12 md:col-4">
+                        <div class="field mt-3 space">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                    inputId="dropdown"
+                                    [autoDisplayFirst]="false"
+                                    [options]="listaArea"
+                                    [(ngModel)]="area"
+                                    formControlName="idArea"
+                                    optionLabel="nombre"
+                                    ></p-dropdown>
+                                    <label for="dropdown">AREA</label>
+                            </span>
+                        </div>
+                        <div class="field space">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                    inputId="dropdown"
+                                    [autoDisplayFirst]="false"
+                                    [options]="listaTipomuestra"
+                                    [(ngModel)]="tipomuestra"
+                                    formControlName="idTipoMuestra"
+                                    optionLabel="nombre"
+                                    ></p-dropdown>
+                                    <label for="dropdown">TIPO MUESTRA</label>
+                            </span>
+                        </div> 
+                        <div class="field space">
+                            <span class="p-float-label">
+                                <input
+                                    type="text"
+                                    id="inputtext"
+                                    pInputText
+                                    formControlName="abreviatura"
+                                    maxlength="20"
+                                />
+                                <label for="inputtext">ABREVIATURA</label>
+                            </span>
+                        </div>
+                        <div class="field space">
+                            <span class="p-float-label">
+                                <input
+                                    type="text"
+                                    id="inputtext"
+                                    pInputText
+                                    formControlName="nombre"
+                                    maxlength="50"
+                                />
+                                <label for="inputtext">NOMBRE</label>
+                            </span>
+                        </div>                                             
+                    </div>
+                    
+                    <div class="col-12 md:col-4">                                             
+                        <div class="field mt-3 space">
+                            <span class="p-float-label">
+                                <input
+                                    type="text"
+                                    id="inputtext"
+                                    pInputText
+                                    formControlName="unidadMedida"
+                                    maxlength="50"
+                                />
+                                <label for="inputtext">UNIDAD MEDIDA</label>
+                            </span>
+                        </div> 
+                        <div class="field space">
+                            <span class="p-float-label">
+                                <input
+                                    type="text"
+                                    id="inputtext"
+                                    pInputText
+                                    formControlName="calculado"
+                                    maxlength="50"
+                                />
+                                <label for="inputtext">FORMULA</label>
+                            </span>
+                        </div>
+                        <div class="field space">
+                            <span class="p-float-label">
+                                <input
+                                    type="number"
+                                    id="inputtext"
+                                    pInputText
+                                    formControlName="cantidadDecimal"
+                                    maxlength="2"
+                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                />
+                                <label for="inputtext">CANT. DECIMAL</label>
+                            </span>
+                        </div>  
+                        <div class="field space">
+                            <span class="p-float-label">
+                                <input
+                                    type="number"
+                                    id="inputtext"
+                                    pInputText
+                                    formControlName="tiempoTrackingMin"
+                                    min="1"                              
+                                    />
+                                <label for="inputtext">TIEMPO EN MINUTOS DE TRACKING</label>
+                            </span>
+                        </div> 
+
+                        
+                    </div>
+    
+                    <div class="col-12 md:col-4">      
+                        <div class="field mt-3 space">
+                            
+                            <span class="p-float-label">
+                                <textarea [readOnly]="true" rows="8" cols="30" placeholder="Observacion" formControlName="rangoMostrar" pInputTextarea></textarea>
+                                <label for="inputtext">RANGO MOSTRAR</label>
+                            </span>
+                        </div>
+                        <div class="field space">
+                            <div class="col-12 md:col-6">
+                                <label for="inputtext">COLOR  </label>
+                                 <p-colorPicker  [(ngModel)]="valColor" formControlName="color" [style]="{'width': '2rem'}"></p-colorPicker>
+                            </div>
+                        </div>  
+                                       
+                    </div>  
+
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="CONFIGURAR RANGO" class="line-height-3 m-0">
+                <div class="grid p-fluid">
+                    <div class="col-12 md:col-12">
+                        <div class="grid p-fluid">
+                            <div class="col-12 md:col-3">
+                                <span class="p-float-label">
+                                    <p-dropdown
+                                        inputId="dropdown"
+                                        [autoDisplayFirst]="false"
+                                        [options]="listaTipoCongRango"
+                                        [(ngModel)]="tipoCongRango"
+                                        (onChange)="mostrarRango()"
+                                        formControlName="tipoCongRango"
+                                        optionLabel="nombre"
+                                        ></p-dropdown>
+                                        <label for="dropdown">TIPO CONF. RANGO</label>
+                                </span>
+                            </div>                                  
+                        </div>
+
+                        <div class="grid p-fluid">
+                            <div *ngIf="validar=='SEXO'" class="col-12 md:col-2 field mt-4 space">
+                                <span class="p-float-label">
+                                    <p-dropdown
+                                    inputId="dropdown"
+                                    [autoDisplayFirst]="true"
+                                    [options]="listaSexo"
+                                    [(ngModel)]="sexo"
+                                    formControlName="idSexo"
+                                    optionLabel="nombre"
+                                    ></p-dropdown>
+                                    <label for="dropdown">SEXO</label>
+                                </span>
+                            </div>
+                            <div *ngIf="validar=='INT1'" class="col-12 md:col-2 field field mt-4 space">
+                                <span class="p-float-label">
+                                    <p-dropdown
+                                    inputId="dropdown"
+                                    [autoDisplayFirst]="true"
+                                    [options]="listaInterpretacion2"
+                                    [(ngModel)]="interpretacion2"
+                                    formControlName="idInterpretado"
+                                    optionLabel="nombre"
+                                    ></p-dropdown>
+                                    <label for="dropdown">INTERPRETADO</label>
+                                </span>
+                            </div>
+                            <div *ngIf="validar=='INT2'" class="col-12 md:col-2 field field mt-4 space">
+                                <span class="p-float-label">
+                                    <p-dropdown
+                                    inputId="dropdown"
+                                    [autoDisplayFirst]="true"
+                                    [options]="listaInterpretacion"
+                                    [(ngModel)]="interpretacion"
+                                    formControlName="idInterpretado"
+                                    optionLabel="nombre"
+                                    ></p-dropdown>
+                                    <label for="dropdown">INTERPRETADO</label>
+                                </span>
+                            </div>
+                            <div *ngIf="validar=='SEXO'" class="col-12 md:col-1">
+                                <div class="field mt-4 space">
+                                    <span class="p-float-label">
+                                        <input
+                                            type="number"
+                                            id="inputtext"
+                                            pInputText
+                                            formControlName="edadInicio"
+                                            maxlength="2"
+                                            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                        />
+                                        <label for="inputtext">EDAD INICIO</label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div *ngIf="validar=='SEXO'" class="col-12 md:col-1">
+                                <div class="field mt-4 space">
+                                    <span class="p-float-label">
+                                        <input
+                                            type="number"
+                                            id="inputtext"
+                                            pInputText
+                                            formControlName="edadFinal"
+                                            maxlength="2"
+                                            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                        />
+                                        <label for="inputtext">EDAD FIN</label>
+                                    </span>
+                                </div>
+                            </div>  
+                            <div class="col-12 md:col-2">
+                                <div class="field mt-4 space">
+                                    <span class="p-float-label">
+                                        <input
+                                            type="number"
+                                            id="inputtext"
+                                            pInputText
+                                            formControlName="valorMinimo"
+                                            maxlength="7"
+                                            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                        />
+                                        <label for="inputtext">VALOR MININO</label>
+                                    </span>
+                                </div>
+                            </div> 
+                            <div class="col-12 md:col-1">
+                                <div class="field mt-4 space">
+                                    <span class="p-float-label">
+                                        <p-dropdown
+                                        inputId="dropdown"
+                                        [autoDisplayFirst]="true"
+                                        [options]="listaSignoComparativo"
+                                        [(ngModel)]="signoComparativo"
+                                        formControlName="sigComparativo"
+                                        optionLabel="nombre"
+                                        ></p-dropdown>
+                                        <label for="dropdown">SIG.COM</label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-2">
+                                <div class="field mt-4 space">
+                                    <span class="p-float-label">
+                                        <input
+                                            type="number"
+                                            id="inputtext"
+                                            pInputText
+                                            formControlName="valorMaximo"
+                                            maxlength="7"
+                                            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                        />
+                                        <label for="inputtext">VALOR MAXIMO</label>
+                                    </span>
+                                </div>
+                            </div>
+                                                      
+                            <div class="col-2 md:col-2 field mt-4 space">                                
+                                <button pButton pRipple label="Agregar" icon="pi pi-plus" class="p-button-info mr-2" (click)="agregarRango()"></button>                                
+                            </div>                                   
+                        </div>
+            
+                        <p-table *ngIf="validar=='SEXO'" #dt1 [value]="datanointerpretado1" dataKey="id" [rows]="10" [rowHover]="true" styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="min-width: 8rem" pSortableColumn="codigo">Sexo <p-sortIcon field="codigo"></p-sortIcon></th>
+                                    <th style="min-width: 9rem" pSortableColumn="userName">Edad Inicio <p-sortIcon field="userName"></p-sortIcon></th>
+                                    <th style="min-width: 10rem" pSortableColumn="nombre">Edad Final <p-sortIcon field="nombre"></p-sortIcon></th>
+                                    <th style="min-width: 10rem" pSortableColumn="estado">Valor Minimo <p-sortIcon field="estado"></p-sortIcon></th>                                    
+                                    <th style="min-width: 2rem" pSortableColumn="estado">Sig. Comp.<p-sortIcon field="estado"></p-sortIcon></th>
+                                    <th style="min-width: 12rem" pSortableColumn="estado">Valor Maximo <p-sortIcon field="estado"></p-sortIcon></th>
+                                    <th style="min-width: 12rem" pSortableColumn="accion">Acciones</th>				
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-data>
+                                <tr>
+                                    <td>
+                                        {{data.interpretado}}
+                                    </td>
+                                    <td>
+                                        <span class="image-text ml-2">{{data.edadInicio}}</span>
+                                    </td>
+                                    <td>
+                                        <span class="image-text ml-2">{{data.edadFinal}}</span>
+                                    </td>	
+                                    <td>
+                                        <span class="image-text ml-2">{{data.valorMinimo}}</span>
+                                    </td>
+                                    <td>
+                                        <span class="image-text ml-1">{{data.sigComparativo}}</span>
+                                    </td>				
+                                    <td>
+                                        <span class="image-text ml-2">{{data.valorMaximo}}</span>                                       
+                                    </td>                                   					
+                                    <td>
+                                        <div class="flex flex-wrap gap-2">
+                                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="eliminarRango(data)"></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="8">No customers found.</td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="loadingbody">
+                                <tr>
+                                    <td colspan="8">Loading customers data. Please wait.</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+
+                        <p-table *ngIf="validar=='INT2'" #dt1 [value]="datainterpretado" dataKey="id" [rows]="3" [rowHover]="true" styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="min-width: 8rem" pSortableColumn="codigo">Resultado <p-sortIcon field="codigo"></p-sortIcon></th>
+                                    <th style="min-width: 10rem" pSortableColumn="estado">Valor Minimo <p-sortIcon field="estado"></p-sortIcon></th>
+                                    <th style="min-width: 2rem" pSortableColumn="estado">Sig. Comp. <p-sortIcon field="estado"></p-sortIcon></th>
+                                    <th style="min-width: 12rem" pSortableColumn="estado">Valor Maximo <p-sortIcon field="estado"></p-sortIcon></th>
+                                    <th style="min-width: 12rem" pSortableColumn="accion">Acciones</th>				
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-data>
+                                <tr>
+                                    <td>
+                                        {{data.interpretado}}
+                                    </td>	
+                                    <td>
+                                        <span class="image-text ml-2">{{data.valorMinimo}}</span>
+                                    </td>
+                                    <td>
+                                        <span class="image-text ml-1">{{data.sigComparativo}}</span>
+                                    </td>					
+                                    <td>
+                                        <span class="image-text ml-2">{{data.valorMaximo}}</span>                                       
+                                    </td>                                   				
+                                    <td>
+                                        <div class="flex flex-wrap gap-2">
+                                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="eliminarRango(data)"></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="6">No customers found.</td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="loadingbody">
+                                <tr>
+                                    <td colspan="6">Loading customers data. Please wait.</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+
+                        <p-table *ngIf="validar=='INT1'" #dt1 [value]="datanointerpretado2" dataKey="id" [rows]="3" [rowHover]="true" styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="min-width: 8rem" pSortableColumn="codigo">Resultado <p-sortIcon field="codigo"></p-sortIcon></th>
+                                    <th style="min-width: 10rem" pSortableColumn="estado">Valor Minimo <p-sortIcon field="estado"></p-sortIcon></th>
+                                    <th style="min-width: 2rem" pSortableColumn="estado">Sig. Comp. <p-sortIcon field="estado"></p-sortIcon></th>
+                                    <th style="min-width: 12rem" pSortableColumn="estado">Valor Maximo <p-sortIcon field="estado"></p-sortIcon></th>                                   
+                                    <th style="min-width: 12rem" pSortableColumn="accion">Acciones</th>				
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-data>
+                                <tr>
+                                    <td>
+                                        {{data.interpretado}}
+                                    </td>	
+                                    <td>
+                                        <span class="image-text ml-2">{{data.valorMinimo}}</span>
+                                    </td>
+                                    <td>
+                                        <span class="image-text ml-1">{{data.sigComparativo}}</span>
+                                    </td>					
+                                    <td>
+                                        <span class="image-text ml-2">{{data.valorMaximo}}</span>                                       
+                                    </td>                                   				
+                                    <td>
+                                        <div class="flex flex-wrap gap-2">
+                                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="eliminarRango(data)"></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="6">No customers found.</td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="loadingbody">
+                                <tr>
+                                    <td colspan="6">Loading customers data. Please wait.</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+
+                        <p-table *ngIf="validar=='INT3'" #dt1 [value]="datanointerpretado3" dataKey="id" [rows]="1" [rowHover]="true" styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="min-width: 10rem" pSortableColumn="estado">Valor Minimo <p-sortIcon field="estado"></p-sortIcon></th>
+                                    <th style="min-width: 2rem" pSortableColumn="estado">Sig. Comp. <p-sortIcon field="estado"></p-sortIcon></th>
+                                    <th style="min-width: 12rem" pSortableColumn="estado">Valor Maximo <p-sortIcon field="estado"></p-sortIcon></th>                                   
+                                    <th style="min-width: 12rem" pSortableColumn="accion">Acciones</th>				
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-data>
+                                <tr>
+                                    <td>
+                                        <span class="image-text ml-2">{{data.valorMinimo}}</span>
+                                    </td>
+                                    <td>
+                                        <span class="image-text ml-1">{{data.sigComparativo}}</span>
+                                    </td>					
+                                    <td>
+                                        <span class="image-text ml-2">{{data.valorMaximo}}</span>                                       
+                                    </td>                                   				
+                                    <td>
+                                        <div class="flex flex-wrap gap-2">
+                                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="eliminarRango(data)"></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="6">No customers found.</td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="loadingbody">
+                                <tr>
+                                    <td colspan="6">Loading customers data. Please wait.</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>                   
+                </div>                
+            </p-tabPanel>
+        </p-tabView>
+        
+    </div>
+</div>
+    

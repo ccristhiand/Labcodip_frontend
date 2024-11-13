@@ -1,0 +1,227 @@
+<div class="grid">
+    <div class="col-5">
+		<div class="card">
+            <h5>TIPO DE CONTROL</h5>
+            <p-toast key="tst"></p-toast>
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <div>{{nombreConfiguracion}}</div>
+					</div>
+                </ng-template>
+                <ng-template pTemplate="right">
+                    <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2" (click)="modalConfiguracion()"></button>
+                </ng-template>
+            </p-toolbar>
+            <p-table #dt1 [value]="datacollection" dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['name','country.name','representative.name','status']" responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="min-width: 8rem" pSortableColumn="nombre">Datos <p-sortIcon field="nombre"></p-sortIcon></th>
+                        <th style="min-width: 8rem" pSortableColumn="nombre">Eq. Medico <p-sortIcon field="nombre"></p-sortIcon></th>
+                        <th style="min-width: 2rem" pSortableColumn="accion">Acciones</th>				
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-data>
+                    <tr>
+                        <td>
+                            <span class="image-text ml-2">{{data.nombre}}</span>
+                        </td>	
+                        <td>
+                            <span class="image-text ml-2">{{data.nombreEquipo}}</span>
+                        </td>	
+                        <td>
+                            <div class="flex flex-wrap gap-2">
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="modalConfiguracion(data)"></button>
+                                <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-info mr-2" (click)="mapear(data)"></button>							
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="eliminar(data)"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="8">No customers found.</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="8">Loading customers data. Please wait.</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+		</div>
+	</div>
+
+    <div class="col-7">
+		<div class="card">
+			<h5>REACTIVO</h5>       
+            <p-toast key="tst"></p-toast>
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">   
+                        <div>{{nombreReactivo}}</div>                   
+					</div>
+                </ng-template>
+                <ng-template pTemplate="right">
+                    <button pButton pRipple label="Agregar" icon="pi pi-plus" class="p-button-success mr-2" (click)="modalAgregarReactivo()"></button>
+                </ng-template>
+            </p-toolbar>
+           
+            <div class="grid p-fluid">
+                <div *ngFor="let item of dataDetcollection" class="col-6 mb-2 md:col-3 md:mb-0">
+                    <p-toggleButton (dblclick)="directExamen(item.idReactivoDet!)" [style]="{background:''}" onLabel="{{item.nombre}}" offLabel="{{item.nombre}}"></p-toggleButton>          
+                </div>
+             </div>
+		</div>
+	</div>
+
+    <div [formGroup]="form" #frmGrupo="ngForm">
+        <p-dialog [(visible)]="configDialog" [style]="{width: '500px'}" header="CREAR CONFIGURACIÓN" [modal]="true" class="p-fluid">
+            <ng-template pTemplate="content">
+                <div class="grid p-fluid">
+                    <div class="col-12 md:col-12">
+                        <div class="field mt-4 space">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                inputId="dropdown"
+                                [autoDisplayFirst]="true"
+                                [options]="listaEquipoMedico"
+                                [(ngModel)]="equipoMedico"
+                                formControlName="idEquipoMedico"
+                                optionLabel="nombre"
+                                ></p-dropdown>
+                                <label for="dropdown">EQUIPO MEDICO</label>
+                            </span>
+                        </div>
+                        <div class="field space">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                inputId="dropdown"
+                                [autoDisplayFirst]="true"
+                                [options]="listaModo"
+                                [(ngModel)]="modo"
+                                formControlName="idModo"
+                                optionLabel="nombre"
+                                ></p-dropdown>
+                                <label for="dropdown">MODO</label>
+                            </span>
+                        </div>
+                        <div class="field space">
+                            <span class="p-float-label">
+                                <input
+                                    type="text"
+                                    id="inputtext"
+                                    pInputText
+                                    formControlName="nombre"
+                                    maxlength="50"
+                                />
+                                <label for="inputtext">NOMBRE</label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="cerrarConfig()"></button>
+                <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text" (click)="guardarConfig()" [disabled]="frmGrupo.invalid"></button>
+            </ng-template>
+        </p-dialog>
+    </div>
+
+    <div>
+        <p-dialog [(visible)]="reactivoDialog" [style]="{width: '500px', height:'500px'}" header="CREAR REACTIVO" [modal]="true" class="p-fluid">
+            <ng-template pTemplate="content">
+                <div class="grid p-fluid">
+                    <div class="col-12 md:col-12">
+                      
+                        <div class="field mt-4 space">
+                            <span class="p-float-label">
+                                <input
+                                    type="text"
+                                    id="inputtext"
+                                    pInputText
+                                    maxlength="50"
+                                    disabled="true"
+                                    [(ngModel)]="areaSelect"
+                                />
+                                <label for="inputtext">AREA</label>
+                            </span>
+                        </div>
+
+                        <div class="field space">
+                            <span class="p-float-label">
+                                <input
+                                    type="text"
+                                    id="inputtext"
+                                    pInputText
+                                    maxlength="50"
+                                    disabled="true"
+                                    [(ngModel)]="tipoControlSelect"
+                                />
+                                <label for="inputtext">TIPO CONTROL</label>
+                            </span>
+                        </div>
+
+                        <div *ngIf="porexamen" class="field space">
+                            <span class="p-float-label">
+                                <input
+                                    type="text"
+                                    id="inputtext"
+                                    pInputText
+                                    maxlength="50"
+                                    [(ngModel)]="nombreSelect"
+                                />
+                                <label for="inputtext">NOMBRE</label>
+                            </span>
+                        </div>
+
+                        <div *ngIf="porexamen" class="field space">
+                            <p-multiSelect [options]="listaReactivoExamen1" [(ngModel)]="selectedReactivoExamen1" placeholder="EXAMEN"
+                            optionLabel="nombre" class="multiselect-custom" display="chip">
+                            <ng-template let-country pTemplate="item">
+                                <div class="flex align-items-center">
+                                    <span class="ml-2">{{country.nombre}}</span>
+                                </div>
+                            </ng-template>
+                            </p-multiSelect>
+                        </div>
+
+                        <div *ngIf="!porexamen" class="field space">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                inputId="dropdown"
+                                [autoDisplayFirst]="true"
+                                [options]="listaReactivoExamen2"
+                                [(ngModel)]="selectedReactivoExamen2"
+                                optionLabel="nombre"
+                                ></p-dropdown>
+                                <label for="dropdown">EXAMEN</label>
+                            </span>
+                        </div>
+                
+                        
+                    </div>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="cerrarReactivo()"></button>
+                <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text" (click)="guardarReactivo()"></button>
+            </ng-template>
+        </p-dialog>
+    </div>
+
+    <p-dialog [(visible)]="deleteConfigDialog" header="Confirmar" [modal]="true" [style]="{width:'450px'}">
+        <div class="flex align-items-center justify-content-center">
+            <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+            <span *ngIf="reactivo">{{mensaje}} <br> <b>{{reactivo.nombre}}</b>?</span>
+        </div>
+        <ng-template pTemplate="footer">
+            <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteConfigDialog = false"></button>
+            <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Si" (click)="confirmar(reactivo.idReactivo!)"></button>
+        </ng-template>
+    </p-dialog>
+
+</div>
+

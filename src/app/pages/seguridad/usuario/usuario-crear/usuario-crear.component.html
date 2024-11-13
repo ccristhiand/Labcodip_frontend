@@ -1,0 +1,215 @@
+<div [formGroup]="form" #frmGrupo="ngForm">
+<div class="card">
+    <h5>CREAR USUARIO</h5>
+    
+    <p-toast key="tst"></p-toast>
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+        </ng-template>
+
+        <ng-template pTemplate="right">
+            <button pButton pRipple label="Atrás" icon="pi pi-step-backward" class="p-button-secondary mr-2" [routerLink]="['/seguridad/usuario']"></button>
+            <button pButton pRipple label="Guardar" icon="pi pi-save" class="p-button-success mr-2" (click)="guardar()" [disabled]="frmGrupo.invalid" ></button>
+        </ng-template>
+    </p-toolbar>
+    
+    <p-tabView orientation="left">
+        <p-tabPanel header="USUARIO" class="line-height-6 m-2">
+            <div class="grid p-fluid">
+
+                <div class="col-12 md:col-4">
+                    <div class="field mt-3 space">
+                        <span class="p-float-label">
+                            <p-dropdown
+                            inputId="dropdown"
+                            [autoDisplayFirst]="true"
+                            [options]="listaTipodocumento"
+                            [(ngModel)]="tipoDocu"
+                            formControlName="idTipoDocu"
+                            optionLabel="nombre"
+                            ></p-dropdown>
+                            <label for="dropdown">TIPO DOCUMENTO</label>
+                        </span>
+                    </div>
+                    <div class="field mt-3 space">
+                        <span class="p-float-label">
+                            <input
+                                type="text"
+                                id="inputtext"
+                                pInputText
+                                formControlName="nroDocumento"
+                                maxlength="15"
+                            />
+                            <label for="inputtext">NRO DOCUMENTO</label>
+                        </span>
+                    </div>
+                    <div class="field space">
+                        <span class="p-float-label">
+                            <input
+                                type="text"
+                                id="inputtext"
+                                pInputText
+                                formControlName="apePaterno"
+                                maxlength="50"
+                            />
+                            <label for="inputtext">APELLIDO PATERNO</label>
+                        </span>
+                    </div>
+                    <div class="field space">
+                        <span class="p-float-label">
+                            <input
+                                type="text"
+                                id="inputtext"
+                                pInputText
+                                formControlName="apeMaterno"
+                                maxlength="50"
+                            />
+                            <label for="inputtext">APELLIDO MATERNO</label>
+                        </span>
+                    </div>
+                    <div class="field space">
+                        <span class="p-float-label">
+                            <input
+                                type="text"
+                                id="inputtext"
+                                pInputText
+                                formControlName="nombre"
+                                maxlength="50"
+                            />
+                            <label for="inputtext">NOMBRE COMPLETO</label>
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="col-12 md:col-4">                    
+                    <div class="field mt-3 space">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                inputId="dropdown"
+                                [autoDisplayFirst]="false"
+                                [options]="listaSexo"
+                                [(ngModel)]="sexo"
+                                formControlName="idSexo"
+                                optionLabel="nombre"
+                            ></p-dropdown>
+                            <label for="dropdown">SEXO</label>
+                        </span>
+                    </div>
+                    <div class="field space">
+                        <span class="p-float-label">
+                            <p-calendar
+                                inputId="calendar"
+                                formControlName="fechaNacimiento"
+                                dateFormat="dd/mm/yy" 
+                            ></p-calendar>
+                            <label for="calendar">FECHA NACIMIENTO</label>
+                        </span>
+                    </div>
+                    <div class="field space">
+                        <span class="p-float-label">
+                            <input
+                                type="text"
+                                id="inputtext"
+                                pInputText
+                                formControlName="edad"
+                                maxlength="2"
+                            />
+                            <label for="inputtext">EDAD</label>
+                        </span>
+                    </div>
+
+                    <div class="field space">
+                        <div class="card">
+                            <h5>FIRMA</h5>
+                            
+                        </div>
+                    </div>
+        
+
+                </div>
+
+                <div class="col-12 md:col-4">                    
+                    <div class="field mt-3 space">
+                        <span class="p-float-label">
+                            <input
+                                type="text"
+                                id="inputtext"
+                                pInputText
+                                formControlName="userName"
+                                maxlength="20"
+                            />
+                            <label for="inputtext">USUARIO</label>
+                        </span>
+                    </div>
+                    <div class="field space">
+                        <span class="p-float-label">
+                            <input
+                                type="password"
+                                id="inputtext"
+                                pInputText
+                                formControlName="password"
+                                maxlength="20"
+                            />
+                            <label for="inputtext">PASSWORD</label>
+                        </span>
+                    </div>
+                    <div class="field grid">
+                        
+                            <label htmlFor="name3" class="col-4 mb-4 md:col-4 md:mb-0">ENVIAR AL ESSI</label>
+                            <div class="col-4 md:col-4">
+                                <p-toggleButton formControlName="essi" [(ngModel)]="essi" onLabel="Yes" offLabel="No"
+                                [style]="{'width': '10em'}"></p-toggleButton>
+                            </div>
+                    </div>
+
+                    <div class="field grid">
+                        
+                        <label htmlFor="name3" class="col-4 mb-4 md:col-4 md:mb-0">PERMISO ESCRITURA</label>
+                        <div class="col-4 md:col-4">
+                            <p-toggleButton formControlName="escritura" [(ngModel)]="escritura" onLabel="Yes" offLabel="No"
+                            [style]="{'width': '10em'}"></p-toggleButton>
+                        </div>
+                </div>
+                </div>
+
+            </div>
+        </p-tabPanel>
+
+        
+        <p-tabPanel header="ROLES" class="line-height-3 m-0">
+            <div class="grid p-fluid">
+                <div class="col-12 md:col-4">
+                    <h5>FIRMA</h5>
+                    <div class="card p-0">
+                        <p-fileUpload #fileUploader name="demo[]" url="./upload.php" accept="image/*" (onUpload)="onUpload($event)" [customUpload]="true"
+                            [multiple]="true" (onSelect)="onUpload($event)" [showUploadButton]="true"
+                            [showCancelButton]="false" [auto]="true" class="w-full">
+                            <ng-template pTemplate="content">
+                                <div class="w-full py-3" style="cursor: copy" (click)="fileUploader.advancedFileInput.nativeElement.click()">
+                                    <div class="flex flex-wrap gap-5" *ngIf="uploadedFiles.length">
+                                        <div *ngFor="let file of uploadedFiles; let i = index;" class="h-full relative w-7rem h-7rem border-3 border-transparent border-round hover:bg-primary transition-duration-100 cursor-auto" (mouseenter)="onImageMouseOver(file)" (mouseleave)="onImageMouseLeave(file)" style="padding: 1px;">
+                                            <img [src]="file.objectURL" [alt]="file.name" class="w-full h-full border-round shadow-2">
+                                            <button [id]="file.name" #buttonEl pButton pRipple type="button" icon="pi pi-times" class="p-button-rounded p-button-primary text-sm absolute justify-content-center align-items-center cursor-pointer" style="top: -10px; right: -10px; display: none;" (click)="removeImage($event, file)"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </p-fileUpload>
+                    </div>
+                </div>
+                <div class="col-12 md:col-4">
+                    <h5>PERFIL</h5>
+                    <p-tree [value]="listaRoles" selectionMode="checkbox" [(selection)]="selectedRol"></p-tree>
+                </div>
+                <div class="col-12 md:col-4">
+                    <h5>AREA</h5>
+                    <p-tree [value]="listaAreas" selectionMode="checkbox" [(selection)]="selectedAreas"></p-tree>
+                </div>
+            </div>
+            
+           
+        </p-tabPanel>
+    </p-tabView>
+    
+</div>
+</div>

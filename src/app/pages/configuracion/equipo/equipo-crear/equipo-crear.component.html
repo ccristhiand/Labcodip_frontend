@@ -1,0 +1,147 @@
+<div class="grid">
+    <div class="col-12">
+
+		<div class="card">
+			<h5>EXAMENES PARA {{formTituloExamen}}</h5>
+            <p-toast key="tst"></p-toast>
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (keyup.enter)="buscar($event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                        </span>
+					</div>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <button pButton pRipple label="Atrás" icon="pi pi-step-backward" class="p-button-secondary mr-2" [routerLink]="['/configuracion/equipomedico']"></button>
+                    <button pButton pRipple label="Agregar" icon="pi pi-plus" class="p-button-info mr-2" (click)="agregarExamen()"></button>
+                </ng-template>
+            </p-toolbar>
+
+			<p-table #dt1 [value]="datacollection" dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+				<ng-template pTemplate="header">
+					<tr>
+						<th style="min-width: 12rem" pSortableColumn="nombre">Cod. Recibe <p-sortIcon field="nombre"></p-sortIcon></th>
+						<th style="min-width: 12rem" pSortableColumn="nroDocumento">Cod. Devuelve <p-sortIcon field="nroDocumento"></p-sortIcon></th>
+                        <th style="min-width: 12rem" pSortableColumn="codigo">Examen <p-sortIcon field="codigo"></p-sortIcon></th>
+                        <th style="min-width: 12rem" pSortableColumn="codigo">U.M <p-sortIcon field="codigo"></p-sortIcon></th>
+						<th style="min-width: 12rem" pSortableColumn="estado">Area <p-sortIcon field="estado"></p-sortIcon></th>
+						<th style="min-width: 12rem" pSortableColumn="accion">Acciones</th>				
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-data>
+					<tr>
+						<td>
+							<input pInputText type="text" value="{{data.codRecibe}}" (change)="guardarCodigo($event, 'R', data.idEquipoMedicoExamen)">
+						</td>
+						<td>
+							<input pInputText type="text" value="{{data.codDevuelve}}" (change)="guardarCodigo($event, 'D', data.idEquipoMedicoExamen)">
+						</td>					
+						<td>
+							<span class="image-text ml-2">{{data.nombreExamen}}</span>
+						</td>
+                        <td>
+							<span class="image-text ml-2">{{data.unidadMedida}}</span>
+						</td>
+						<td>
+							<span class="image-text ml-2">{{data.nombreArea}}</span>
+						</td>
+						<td>
+                            <div class="flex flex-wrap gap-2">
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="eliminar(data)"></button>
+                            </div>
+                        </td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="6">No customers found.</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="loadingbody">
+					<tr>
+						<td colspan="6">Loading customers data. Please wait.</td>
+					</tr>
+				</ng-template>
+    		</p-table>
+		</div>
+
+        <p-dialog [(visible)]="equipoMedicoExamenDialog" [style]="{width: '700px'}" header="{{formTituloMExamen}}" [modal]="true" class="p-fluid">
+            <ng-template pTemplate="coequipntent">
+                <p-toolbar styleClass="mb-4">
+                    <ng-template pTemplate="left">
+                        <div class="my-2">
+                            <span class="block mt-2 md:mt-0 p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" (keyup.enter)="buscarExamen($event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                            </span>
+                        </div>
+                    </ng-template>
+    
+                    <ng-template pTemplate="right">
+                    </ng-template>
+                </p-toolbar>
+                    <p-table #dt1 [value]="datacollectionexamen" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="min-width: 5rem" pSortableColumn="codigo">Codigo <p-sortIcon field="codigo"></p-sortIcon></th>
+                                <th style="min-width: 10rem" pSortableColumn="codigo">Examen <p-sortIcon field="codigo"></p-sortIcon></th>
+                                <th style="min-width: 8rem" pSortableColumn="userName">Area <p-sortIcon field="userName"></p-sortIcon></th>
+                                <th style="min-width: 8rem" pSortableColumn="nombre">T.M <p-sortIcon field="nombre"></p-sortIcon></th>
+                                <th style="min-width: 3rem" pSortableColumn="accion">Marcar</th>				
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-data>
+                            <tr>
+                                <td>
+                                    <span class="image-text ml-2">{{data.codigo}}</span>
+                                </td>
+                                <td>
+                                    <span class="image-text ml-2">{{data.nombre}}</span>
+                                </td>
+                                <td>
+                                    <span class="image-text ml-2">{{data.nombreArea}}</span>
+                                </td>					
+                                <td>
+                                    <span class="image-text ml-2">{{data.nombreTipoMuestra}}</span>
+                                </td>					
+                                <td>
+                                    <p-checkbox name="group1" value="{{data.idExamen}}" [(ngModel)]="valCheck" id="{{data.idExamen}}"></p-checkbox>
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="5">No customers found.</td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="loadingbody">
+                            <tr>
+                                <td colspan="5">Loading customers data. Please wait.</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>                  
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="cerrar()"></button>
+                <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text" (click)="guardarExamen()"></button>
+            </ng-template>
+        </p-dialog>    
+
+        <p-dialog [(visible)]="deleteEquipoMedicoExamenDialog" header="Confirmar" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="equipoMedicoExamen">{{mensaje}} <br> <b>{{equipoMedicoExamen.nombreExamen}}</b>?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteEquipoMedicoExamenDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Si" (click)="confirmar(equipoMedicoExamen.idEquipoMedicoExamen!)"></button>
+            </ng-template>
+        </p-dialog>
+
+	</div>
+</div>
+

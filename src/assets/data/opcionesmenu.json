@@ -1,0 +1,46 @@
+{
+    "data": [
+    {
+        "label": "INICIO",
+        "icon": "faHouse",
+        "items": [
+            {
+                "label": "Dashboards",
+                "icon": "faChartColumn",
+                "routerLink": "['/inicio']"
+            }
+        ]
+    },
+    {
+        "label": "LABORATORIO",
+        "icon": "faFlaskVial",
+        "items": [
+            {
+                "label": "Ordenes",
+                "icon": "faBarcode",
+                "routerLink": "['/laboratorio/orden']"
+            },
+            {
+                "label": "Médico",
+                "icon": "faUserDoctor",
+                "routerLink": "['/laboratorio/medico']"
+            },
+            {
+                "label": "Origen",
+                "icon": "faBuilding",
+                "routerLink": "['/laboratorio/origen']"
+            },
+            {
+                "label": "Procedencia",
+                "icon": "faHospital",
+                "routerLink": "['/laboratorio/procedencia']"
+            },
+            {
+                "label": "Servicio",
+                "icon": "faHouseMedical",
+                "routerLink":" ['/laboratorio/servicio']"
+            }
+        ]
+    }
+]
+}

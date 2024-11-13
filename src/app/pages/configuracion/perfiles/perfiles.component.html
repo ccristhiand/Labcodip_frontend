@@ -1,0 +1,173 @@
+<div class="grid">
+    <div class="col-12">
+
+		<div class="card">
+			<h5>LISTADO DE PEFILES</h5>
+
+            <p-toast key="tst"></p-toast>
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (keyup.enter)="buscar($event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                        </span>
+					</div>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <button pButton pRipple label="Refrescar" icon="pi pi-refresh" class="p-button-secondary mr-2" (click)="ListarPerfiles()"></button>
+                    <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2" (click)="EditarPerfil()"></button>
+                </ng-template>
+            </p-toolbar>
+
+			<p-table #dt1 [value]="datacollection" dataKey="codigo" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+				<ng-template pTemplate="header">
+					<tr>
+						<th style="min-width: 12rem" pSortableColumn="codigo">Codigo <p-sortIcon field="codigo"></p-sortIcon></th>
+						<th style="min-width: 12rem" pSortableColumn="nombre">Nombre <p-sortIcon field="nombre"></p-sortIcon></th>
+						<th style="min-width: 12rem" pSortableColumn="estado">Estado <p-sortIcon field="estado"></p-sortIcon></th>
+						<th style="min-width: 12rem" pSortableColumn="accion">Acciones</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-data>
+					<tr>
+						<td>
+							{{data.codigo}}
+						</td>
+
+                        <td>
+							<span class="image-text ml-2">{{data.nombre}}</span>
+						</td>
+						<td style="min-width: 200px;">
+							<span [class]="'customer-badge status-' + data.color">{{data.estado}}</span>
+						</td>
+						<td>
+                            <div class="flex flex-wrap gap-2">
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="EditarPerfil(data)"></button>
+								<button *ngIf="data.estado=='DESACTIVADO'" pButton pRipple icon="pi pi-check" class="p-button-rounded p-button-warning  mr-2" (click)="CambiarEstado(data)"></button>
+								<button *ngIf="data.estado=='ACTIVO'" pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-danger mr-2" (click)="CambiarEstado(data)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="EliminarPerfil(data)"></button>
+                                <button pButton pRipple icon="pi pi-box" class="p-button-rounded p-button-info" (click)="AddPerfilExamen(data)"></button>
+
+                            </div>
+                        </td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="5">No customers found.</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="loadingbody">
+					<tr>
+						<td colspan="5">Loading customers data. Please wait.</td>
+					</tr>
+				</ng-template>
+    		</p-table>
+		</div>
+
+        <div [formGroup]="form" #frmGrupo="ngForm">
+            <p-dialog [(visible)]="perfilDialog" [style]="{width: '500px'}" header="{{formTitulo}}" [modal]="true" class="p-fluid">
+                <ng-template pTemplate="content">
+                    <div class="grid p-fluid">
+                        <div class="col-12 md:col-12">
+                            <div class="field space">
+                                <span class="p-float-label">
+                                    <input
+                                        type="text"
+                                        id="inputtext"
+                                        pInputText
+                                        formControlName="nombre"
+                                        maxlength="50"
+                                    />
+                                    <label for="inputtext">NOMBRE</label>
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="cerrar()"></button>
+                    <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text" (click)="GuardarPerfil()" [disabled]="frmGrupo.invalid"></button>
+                </ng-template>
+            </p-dialog>
+
+        </div>
+
+        <p-dialog [(visible)]="deletePerfilDialog" header="Confirmar" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="perfiles">{{mensaje}} <br> <b>{{perfiles.nombre}}</b>?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deletePerfilDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Si" (click)="confirmar(perfiles.idPerfil!, tipo)"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="perfilExamenDialog" [style]="{width: '50%'}" header="ASIGNAR EXAMENES A {{perfiles.nombre}}" [modal]="true" class="p-fluid">
+            <ng-template pTemplate="content">
+
+                <p-toolbar styleClass="mb-4">
+                    <ng-template pTemplate="left">
+                        <div class="my-2">
+                            <span class="block mt-2 md:mt-0 p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" [(ngModel)]="BuscarExamenesText" (keyup.enter)="ObtenerExamenes()" placeholder="Search..."  class="w-full sm:w-auto"/>
+                            </span>
+                        </div>
+                    </ng-template>
+
+                    <ng-template pTemplate="right">
+                        <button pButton pRipple label="Guardar" icon="pi pi-plus" class="p-button-info mr-2" (click)="GuardarPerfilesExamen()"></button>
+                    </ng-template>
+                </p-toolbar>
+                <label for="">EXAMENES ASIGNADOS AL PERFIL</label>
+                <p-toolbar styleClass="mb-4">
+                    <div *ngFor="let item of perfiles.perfilExamenes" class="col-6 mb-2 md:col-2 md:mb-0">
+                        <p-toggleButton (onChange)="SeleccionarExamen(item)" [style]="{background:'#00953b'}" onLabel="{{item.abreviaturaExamen}}" offLabel="{{item.abreviaturaExamen}}"></p-toggleButton>
+                    </div>
+
+                </p-toolbar>
+
+                <div class="grid p-fluid">
+                    <div class="col-12 md:col-4" style="margin: 0 0 -25px 0;">
+                        <div class="field mt-1 space">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                inputId="dropdown"
+                                [autoDisplayFirst]="true"
+                                [options]="listaArea"
+                                [(ngModel)]="area"
+                                optionValue="id"
+                                optionLabel="nombre"
+                                (onChange)="ObtenerExamenes()"
+                                ></p-dropdown>
+                                <label for="dropdown">AREA</label>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 md:col-8">
+
+                    </div>
+
+                    <div *ngFor="let item of examenes" class="col-6 mb-2 md:col-2 md:mb-0">
+                        <!-- <p-toggleButton (onChange)="sleccionarExamen(item.idExamen!)" *ngIf="item.color=='' " [style]="{background:''}" onLabel="{{item.abreviatura}}" offLabel="{{item.abreviatura}}"></p-toggleButton> -->
+                        <p-toggleButton (onChange)="SeleccionarExamen(item)" *ngIf="item.color!='' " [style]="{background:'#8131e9'}" onLabel="{{item.abreviatura}}" offLabel="{{item.abreviatura}}" [disabled]="item.estadoPerfil"></p-toggleButton>
+                        <!-- <p-toggleButton (onChange)="sleccionarExamen(item.idExamen!)" *ngIf="item.color!='' " [style]="{background:'#8131e9'}" [disabled]="true" onLabel="{{item.abreviatura}}" offLabel="{{item.abreviatura}}"></p-toggleButton> -->
+                    </div>
+
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="cerrar()"></button>
+            </ng-template>
+        </p-dialog>
+
+	</div>
+</div>

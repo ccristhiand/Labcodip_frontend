@@ -1,0 +1,197 @@
+<div [formGroup]="form" #frmGrupo="ngForm">
+    <div class="card">
+        <h5>VALIDAR ORDEN</h5>
+        
+        <p-toast key="tst"></p-toast>
+        <p-toolbar styleClass="mb-4">
+            <ng-template pTemplate="left">
+            </ng-template>
+    
+            <ng-template pTemplate="right">
+                <button pButton pRipple label="Atrás" icon="pi pi-step-backward" class="p-button-secondary mr-2" [routerLink]="['/laboratorio/orden']"></button>
+                <button *ngIf="sesion.permisoEscritura=='True'" pButton pRipple label="Guardar" icon="pi pi-save" class="p-button-success mr-2" (click)="guardar()" [disabled]="frmGrupo.invalid" ></button>
+                <button *ngIf="sesion.permisoEscritura=='True'" pButton pRipple label="Pre. Validación" icon="pi pi-check-circle" class="p-button-primary mr-2" (click)="preValidar()" [disabled]="frmGrupo.invalid" ></button>
+                <button *ngIf="sesion.permisoEscritura=='True'" pButton pRipple label="Val. Médico" icon="pi pi-check" class="p-button-info mr-2" (click)="validar()" [disabled]="frmGrupo.invalid" ></button>
+                <button *ngIf="sesion.permisoEscritura=='True'" pButton pRipple label="Qui. Validación" icon="p-button-icon pi pi-trash" class="p-button-danger mr-2" (click)="quitarValidacion()" [disabled]="frmGrupo.invalid" ></button>
+                <button pButton pRipple label="Resultado" icon="pi pi-print" class="p-button-info mr-2" (click)="imprimirResultado()"></button>
+            </ng-template>
+        </p-toolbar>
+        
+        <div class="grid p-fluid">
+
+            <div class="col-12 md:col-4">
+                <div class="field mt-3 space">
+                    <span class="p-float-label">
+                        <p-dropdown
+                        inputId="dropdown"
+                        [autoDisplayFirst]="true"
+                        [options]="listaTipodocumento"
+                        [(ngModel)]="tipoDocu"
+                        formControlName="idTipoDocu"
+                        optionLabel="nombre"
+                        ></p-dropdown>
+                        <label for="dropdown">TIPO DOCUMENTO</label>
+                    </span>
+                </div>
+                <div class="field space">
+                    <span class="p-float-label">
+                        <input
+                            type="text"
+                            id="inputtext"
+                            pInputText
+                            formControlName="nombre"
+                            maxlength="50"
+                        />
+                        <label for="inputtext">NOMBRE COMPLETO</label>
+                    </span>
+                </div>
+                <div class="field space">
+                    <span class="p-float-label">
+                        <p-dropdown
+                        inputId="dropdown"
+                        [autoDisplayFirst]="true"
+                        [options]="listaArea"
+                        [(ngModel)]="area"
+                        formControlName="idArea"
+                        (onChange)="obtenerExamen()"
+                        optionLabel="nombre"
+                        ></p-dropdown>
+                        <label for="dropdown">AREA</label>
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-12 md:col-4">      
+                <div class="field mt-3 space">
+                    <span class="p-float-label">
+                        <p-calendar
+                            inputId="calendar"
+                            formControlName="fechaOrden"
+                        ></p-calendar>
+                        <label for="calendar">FECHA ORDEN</label>
+                    </span>
+                </div>              
+                <div class="field space">
+                    <span class="p-float-label">
+                        <input
+                            type="text"
+                            id="inputtext"
+                            pInputText
+                            formControlName="cama"
+                            maxlength="20"
+                        />
+                        <label for="inputtext">CAMA</label>
+                    </span>
+                </div>  
+                <div class="field space">
+                    <span class="p-float-label">
+                        <textarea rows="5" cols="30" placeholder="Observacion" formControlName="observacion" pInputTextarea></textarea>
+                        <label for="inputtext">OBSERVACIÓN</label>
+                    </span>
+                </div>              
+            </div>
+
+            <div class="col-12 md:col-4">   
+                <div class="field mt-3 space">
+                    <span class="p-float-label">
+                        <p-dropdown
+                        inputId="dropdown"
+                        [autoDisplayFirst]="true"
+                        [options]="listaProcedencia"
+                        [(ngModel)]="procedencia"
+                        formControlName="idProcedencia"
+                        optionLabel="nombre"
+                        ></p-dropdown>
+                        <label for="dropdown">PROCEDENCIA</label>
+                    </span>
+                </div>    
+                <div class="field space">
+                    <span class="p-float-label">
+                        <p-dropdown
+                        inputId="dropdown"
+                        [autoDisplayFirst]="true"
+                        [options]="listaServicio"
+                        [(ngModel)]="servicio"
+                        formControlName="idServicio"
+                        optionLabel="nombre"
+                        ></p-dropdown>
+                        <label for="dropdown">SERVICIO</label>
+                    </span>
+                </div>
+                <div class="field space">
+                    <span class="p-float-label">
+                        <p-dropdown
+                        inputId="dropdown"
+                        [autoDisplayFirst]="true"
+                        [options]="listaMedico"
+                        [(ngModel)]="medico"
+                        formControlName="idMedico"
+                        optionLabel="nombre"
+                        ></p-dropdown>
+                        <label for="dropdown">MEDICO</label>
+                    </span>
+                </div>
+                                
+            </div>
+
+        </div>
+        
+        <div class="grid p-fluid">
+            <div class="col-12 md:col-12">
+                <p-table #dt1 [value]="datacollection" dataKey="id" [rows]="100" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="min-width: 9rem" pSortableColumn="nroDocumento">Estado <p-sortIcon field="nroDocumento"></p-sortIcon></th>
+                            <th style="min-width: 10rem" pSortableColumn="nroDocumento">Codigo <p-sortIcon field="nroDocumento"></p-sortIcon></th>
+                            <th style="min-width: 8rem" pSortableColumn="codigo">Examen <p-sortIcon field="codigo"></p-sortIcon></th>
+                            <th style="min-width: 4rem" pSortableColumn="userName">F.Resultado <p-sortIcon field="userName"></p-sortIcon></th>
+                            <th style="min-width: 4rem" pSortableColumn="userName">Resultado <p-sortIcon field="userName"></p-sortIcon></th>
+                            <th style="min-width: 4rem" pSortableColumn="nombre">FLG <p-sortIcon field="nombre"></p-sortIcon></th>
+                            <th style="min-width: 10rem" pSortableColumn="estado">U.M <p-sortIcon field="estado"></p-sortIcon></th>
+                            <th style="min-width: 12rem" pSortableColumn="estado">Rango Mostrar <p-sortIcon field="estado"></p-sortIcon></th>						
+                            <!-- <th style="min-width: 12rem" pSortableColumn="accion">Acciones</th>				 -->
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-data>
+                        <tr>
+                            <td>
+                                <span [class]="'customer-badge status-' + data.color">{{data.estado}}</span>
+                            </td>
+                            <td>
+                                {{data.abreviatura}}
+                            </td>
+                            <td>
+                                <span class="image-text ml-2">{{data.nombreExamen}}</span>
+                            </td>
+                            <td>    
+                                <span class="image-text ml-2">{{data.strFechaResultado}}</span>
+                            </td>
+                            <td>
+                                <span class="image-text ml-2" style="display: flex;">
+                                    <input  pInputText [disabled]="data.validado || sesion.permisoEscritura=='False'"  type="text" 
+                                    style="width: 100px; text-align: right;" value="{{data.resultado}}" (change)="guardarResultado($event, data.idOrdenExamen)">
+                                    <i class="pi {{data.simboloResulatdo}}" style="color: red;"></i>
+                                </span>
+                            </td>	
+                            <td>
+                                <span class="image-text ml-2"></span>
+                            </td>
+                            <td>
+                                <span class="image-text ml-2">{{data.unidadMedida}}</span>
+                            </td>
+                            <td>
+                                <span class="image-text ml-2">{{data.referencia}}</span>
+                            </td>						
+                            <!-- <td>
+                                <div class="flex flex-wrap gap-2">
+                                   
+                                </div>
+                            </td> -->
+                        </tr>
+                    </ng-template>
+                   
+                </p-table>
+            </div>         
+        </div>
+    </div>
+</div>

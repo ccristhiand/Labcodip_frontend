@@ -1,0 +1,162 @@
+<div>
+    <div class="card">
+        <h5>CONFIGURACIÓN RANGO</h5>
+        
+        <p-toast key="tst"></p-toast>
+         <p-toolbar styleClass="mb-4">
+            <ng-template pTemplate="left">
+            </ng-template>
+    
+            <ng-template pTemplate="right">
+                <button pButton pRipple label="Atrás" icon="pi pi-step-backward" class="p-button-secondary mr-2" [routerLink]="['/controlcalidad/configuracion']"></button>
+                <button pButton pRipple label="Lote" icon="pi pi-plus" class="p-button-primary mr-2" (click)="modalLoteNivel('L')"></button>
+                <button pButton pRipple label="Nivel" icon="pi pi-plus" class="p-button-info mr-2" (click)="modalLoteNivel('N')"></button>
+            </ng-template>
+        </p-toolbar>
+        
+      <div class="grid p-fluid">
+
+            <div class="col-12 md:col-4">
+                <div class="field  mt-3 space">
+                    <span class="p-float-label">
+                        <input
+                            type="text"
+                            id="inputtext"
+                            pInputText
+                            maxlength="15"
+                            [disabled]="true"
+                            [(ngModel)]="control"
+                        />
+                        <label for="inputtext">CONTROL</label>
+                    </span>
+                </div>
+                <div class="field space">
+                    <span class="p-float-label">
+                        <input
+                            type="text"
+                            id="inputtext"
+                            pInputText
+                            maxlength="50"
+                            [disabled]="true"
+                            [(ngModel)]="fecha"
+                            dateFormat="dd/mm/yy" 
+                        />
+                        <label for="inputtext">FECHA CADUCIDAD</label>
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-12 md:col-4">   
+                <div class="field mt-3 space">
+                    <span class="p-float-label">
+                        <p-dropdown
+                        inputId="dropdown"
+                        [autoDisplayFirst]="true"
+                        [options]="listaLote"
+                        [(ngModel)]="lote"
+                        optionLabel="nombre"
+                        (onChange)="listar()"
+                        ></p-dropdown>
+                        <label for="dropdown">LOTE</label>
+                    </span>
+                </div>                                    
+            </div>
+
+            <div class="col-12 md:col-4">   
+                <div class="field mt-3 space">
+                    <span class="p-float-label">
+                        <p-dropdown
+                        inputId="dropdown"
+                        [autoDisplayFirst]="true"
+                        [options]="listaNivel"
+                        [(ngModel)]="nivel"
+                        optionLabel="nombre"
+                        (onChange)="listar()"
+                        ></p-dropdown>
+                        <label for="dropdown">NIVEL</label>
+                    </span>
+                </div>                                    
+            </div>
+
+        </div>
+        
+        <div class="grid p-fluid">
+            <div class="col-12 md:col-12">
+                <p-table #dt1 [value]="datacollection" dataKey="id" [rows]="100" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="min-width: 9rem" pSortableColumn="nroDocumento">Examen <p-sortIcon field="nroDocumento"></p-sortIcon></th>
+                            <th style="min-width: 2rem" pSortableColumn="nroDocumento">Rango Desde <p-sortIcon field="nroDocumento"></p-sortIcon></th>
+                            <th style="min-width: 2rem" pSortableColumn="userName">Rango Hasta <p-sortIcon field="userName"></p-sortIcon></th>			
+                            <th style="min-width: 2rem" pSortableColumn="codigo">Rango Medio <p-sortIcon field="codigo"></p-sortIcon></th>
+                            <th style="min-width: 2rem" pSortableColumn="userName">Desviación <p-sortIcon field="userName"></p-sortIcon></th>					
+                            <!-- <th style="min-width: 10rem" pSortableColumn="accion">Acciones</th>				 -->
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-data>
+                        <tr>
+                            <td>
+                                <span class="image-text ml-2">{{data.nombreExamen}}</span>
+                            </td>
+                            <td>
+                                <input  pInputText [disabled]="data.validado" type="text" style="text-align: right;" value="{{data.rangoMinimo}}" (change)="guardarResultado($event, data.idReactivoDet, data.idExamen,'Rango Inicial:')">
+                            </td>
+                            <td>
+                                <input  pInputText [disabled]="data.validado" type="text" style="text-align: right;" value="{{data.rangoMaximo}}" (change)="guardarResultado($event, data.idReactivoDet, data.idExamen,'Rango Final:')">
+                            </td>   
+                            <td>
+                               <input  pInputText [disabled]="data.validado" type="text" style="text-align: right;" value="{{data.rangoMedio}}" (change)="guardarResultado($event, data.idReactivoDet, data.idExamen, 'Rango Media:')">
+                            </td>  
+                            <td>
+                               <input  pInputText [disabled]="data.validado" type="text" style="text-align: right;" value="{{data.desviacion}}" (change)="guardarResultado($event, data.idReactivoDet, data.idExamen, 'Desviación:')">
+                            </td>  
+                        </tr>
+                    </ng-template>
+                   
+                </p-table>
+            </div>
+            
+            <div [formGroup]="form" #frmGrupo="ngForm">
+                <p-dialog [(visible)]="modalLoteNivelDialog" [style]="{width: '500px', height:'500px'}" header="CREAR MEDICO" [modal]="true" class="p-fluid">
+                    <ng-template pTemplate="content">
+                        <div class="grid p-fluid">
+                            <div class="col-12 md:col-12">
+
+                                <div class="field mt-4 space">
+                                    <span class="p-float-label">
+                                        <input
+                                            type="text"
+                                            id="inputtext"
+                                            pInputText
+                                            formControlName="nombre"
+                                            maxlength="50"
+                                        />
+                                        <label for="inputtext">NOMBRE</label>
+                                    </span>
+                                </div>
+                               
+                                <div *ngIf="this.tabla=='L'" class="field space">
+                                    <span class="p-float-label">
+                                        <p-calendar
+                                            inputId="calendar"
+                                            formControlName="fechaExpiracion"
+                                            dateFormat="dd/mm/yy" 
+                                        ></p-calendar>
+                                        <label for="calendar">FECHA VENCIMIENTO</label>
+                                    </span>    
+                                </div>
+
+                            </div>
+                        </div>
+                    </ng-template>
+        
+                    <ng-template pTemplate="footer">
+                        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="cerrarLoteNivel()"></button>
+                        <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text" (click)="guardarLoteNivel()" [disabled]="frmGrupo.invalid"></button>
+                    </ng-template>
+                </p-dialog>
+            </div>
+
+        </div>
+    </div>
+</div>
