@@ -24,7 +24,7 @@ export class OrdenValidarComponent implements OnInit {
   datacollection: OrdenExamen[] = [];
 
   loading: boolean = true;
-  
+
   form!: FormGroup;
   essi = false;
   id: string =  "";
@@ -64,7 +64,7 @@ export class OrdenValidarComponent implements OnInit {
     private _usuarioService:UsuarioService
   ) {
   }
-  
+
   ngOnInit() {
     this._activeRoute.params.subscribe((data: Params)=>{
       this.id = (data["id"]==undefined)? "":data["id"];
@@ -83,7 +83,7 @@ export class OrdenValidarComponent implements OnInit {
   ];
 
     this.form = this._fb.group({
-      idTipoDocu: {value:null, disabled:true},     
+      idTipoDocu: {value:null, disabled:true},
       nombre: {value:null, disabled:true},
       fechaOrden: {value:null, disabled:true},
       idProcedencia: {value:null, disabled:true},
@@ -101,25 +101,25 @@ export class OrdenValidarComponent implements OnInit {
     this._spinnerService.show();
 
     this._ordenService.Obtener(this.id).subscribe(data=>{
-      
-      this.listaTipodocumento = data!.listaOpciones.filter(x=>x.tipo==environment.TipoDocumento); 
+
+      this.listaTipodocumento = data!.listaOpciones.filter(x=>x.tipo==environment.TipoDocumento);
       this.listaProcedencia = data!.listaOpciones.filter(x=>x.tipo==environment.Procedencia);
       this.listaServicio = data!.listaOpciones.filter(x=>x.tipo==environment.Servicio);
       this.listaOrigen = data!.listaOpciones.filter(x=>x.tipo==environment.Origen);
       this.listaMedico = data!.listaOpciones.filter(x=>x.tipo==environment.Medico);
       this.listaLaboratorio = data!.listaOpciones.filter(x=>x.tipo==environment.Laboratorio);
-      this.listaArea = data!.listaOpciones.filter(x=>x.tipo=="Area");
+      this.listaArea = [{id:"TODOS",nombre:"TODOS",tipo:""},...data!.listaOpciones.filter(x=>x.tipo==environment.Area)];
 
-      if(this.id !=""){        
+      if(this.id !=""){
           this.form.patchValue({
             idTipoDocu: data.idTipoDocu,
-            nombre:data.nroDocumento + ' - '+ data.nombreCompleto,            
+            nombre:data.nroDocumento + ' - '+ data.nombreCompleto,
             fechaOrden: new Date(data.fechaOrden!),
             cama: data.cama,
             observacion: null,
             idArea: this.listaArea[0].id
-          });  
-  
+          });
+
           this.tipoDocu = this.listaTipodocumento.filter(y=>y.id==data.idTipoDocu)[0];
           this.procedencia = this.listaProcedencia.filter(y=>y.id==data.idProcedencia)[0];
           this.servicio = this.listaServicio.filter(y=>y.id==data.idServicio)[0];
@@ -128,12 +128,12 @@ export class OrdenValidarComponent implements OnInit {
           this.area = this.listaArea[0];;
       }else{
         this.form.patchValue({
-          idTipoDocu: null,          
-          nombre: null,          
+          idTipoDocu: null,
+          nombre: null,
           fechaOrden: new Date(),
           cama: null,
           observacion: null
-        });  
+        });
         this.laboratorio = this.listaLaboratorio[0];
         this.area = this.listaArea[0]
       };
@@ -147,14 +147,14 @@ export class OrdenValidarComponent implements OnInit {
     })
   }
 
-  obtenerArea(){  
+  obtenerArea(){
     this._ordenService.ObtenerExamen(this.id,this.area.id).subscribe(data => {
       this.datacollection = data;
       this.loading = false;
     });
   }
 
-  obtenerExamen(){  
+  obtenerExamen(){
     this._ordenService.ObtenerExamen(this.id,this.area.id).subscribe(data => {
       this.datacollection = data;
       this.loading = false;
@@ -168,27 +168,27 @@ export class OrdenValidarComponent implements OnInit {
 
     ordenExamen.resultado = (resultado.replace(/ /g, "")=="")? null! : resultado.replace(/ /g, "");
   }
-  
+
   guardar(){
     let model = new OrdenValidate();
 
     model.observacion= this.form.value['observacion'];
-    model.listaOrdenExamenQuery= this.datacollection;  
+    model.listaOrdenExamenQuery= this.datacollection;
 
     this._spinnerService.show();
-    
+
     this._ordenService.GuardarResult(this.id, model).subscribe(data=>{
       this.obtenerExamen();
       this._messageService.add({key: data.key, severity: data.typeResponse, summary: data.summary, detail: data.message});
       this._spinnerService.hide();
-    }) 
+    })
   }
 
   preValidar(){
     let model = new OrdenValidate();
 
     model.observacion= this.form.value['observacion'];
-    model.listaOrdenExamenQuery= this.datacollection;  
+    model.listaOrdenExamenQuery= this.datacollection;
 
     this._spinnerService.show();
 
@@ -196,14 +196,14 @@ export class OrdenValidarComponent implements OnInit {
       this.obtenerExamen();
       this._messageService.add({key: data.key, severity: data.typeResponse, summary: data.summary, detail: data.message});
       this._spinnerService.hide();
-    }) 
+    })
   }
 
   validar(){
     let model = new OrdenValidate();
 
     model.observacion= this.form.value['observacion'];
-    model.listaOrdenExamenQuery= this.datacollection;  
+    model.listaOrdenExamenQuery= this.datacollection;
 
     this._spinnerService.show();
 
@@ -211,7 +211,7 @@ export class OrdenValidarComponent implements OnInit {
       this.obtenerExamen();
       this._messageService.add({key: data.key, severity: data.typeResponse, summary: data.summary, detail: data.message});
       this._spinnerService.hide();
-    }) 
+    })
   }
 
   quitarValidacion(){
@@ -221,7 +221,7 @@ export class OrdenValidarComponent implements OnInit {
       this.obtenerExamen();
       this._messageService.add({key: data.key, severity: data.typeResponse, summary: data.summary, detail: data.message});
       this._spinnerService.hide();
-    }) 
+    })
   }
 
   imprimirResultado(){

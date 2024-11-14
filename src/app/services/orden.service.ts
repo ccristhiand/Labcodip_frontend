@@ -14,7 +14,7 @@ import { Reporte } from '../models/reporte.model';
 })
 export class OrdenService {
 
- 
+
   constructor(
     private http: HttpClient
   ) { }
@@ -61,8 +61,8 @@ export class OrdenService {
       return this.http.get<OrdenExamen[]>(urls);
     }
 
-    Examen(id: string, idArea: string){
-      let urls = `${this.url}/Examen?id=${id}&idArea=${idArea}`;
+    Examen(id: string, idArea: string,text?:string){
+      let urls = `${this.url}/Examen?id=${id}&idArea=${idArea}&text=${text}`;
       return this.http.get<OrdenExamen[]>(urls);
     }
 
@@ -86,7 +86,7 @@ export class OrdenService {
       let urls = `${this.url}/postResult/${id}`;
       return this.http.put<Responses>(urls, model);
     }
-    
+
     ValidarTecnico(model: OrdenValidate){
       let urls = `${this.url}/validateTecnico`;
       return this.http.put<Responses>(urls, model);
@@ -96,7 +96,7 @@ export class OrdenService {
       let urls = `${this.url}/validateMedico`;
       return this.http.put<Responses>(urls, model);
     }
-    
+
     QuitarValidacion(id: string, idArea: string){
       let urls = `${this.url}/quitarValidacion/${id}`;
       let model= new OrdenValidate;

@@ -61,7 +61,7 @@ export class OrdenCrearComponent implements OnInit {
   primeraCarga: number = 1;
 
   Perfiles: Perfiles[] = [];
-  
+
   sesion:any;
 
   constructor(
@@ -82,7 +82,7 @@ export class OrdenCrearComponent implements OnInit {
       this.id = (data["id"]==undefined)? "":data["id"];
       this.desabilitar = (this.id=="")? false : true;
     });
-    
+
     this.inicializar();
     this.obtener();
     this.ObtenerPerfiles();
@@ -123,7 +123,7 @@ export class OrdenCrearComponent implements OnInit {
       this.listaOrigen = data!.listaOpciones.filter(x=>x.tipo==environment.Origen);
       this.listaMedico = data!.listaOpciones.filter(x=>x.tipo==environment.Medico);
       this.listaArea = [{id:"TODOS",nombre:"TODOS",tipo:""},...data!.listaOpciones.filter(x=>x.tipo==environment.Area)];
-      
+
       if(this.id !=""){
           this.form.patchValue({
             idTipoDocu: data.idTipoDocu,
@@ -210,12 +210,14 @@ export class OrdenCrearComponent implements OnInit {
    this.obtenerExamen();
   }
 
-  obtenerExamen(){
+  obtenerExamen(text?:Event){
+   debugger
+   const texto = (event?.target as HTMLInputElement)?.value || '';
     this._spinnerService.show();
     this._ordenService.ObtenerExamen(this.id,this.area.id).subscribe(ordenExamen=>{
       this.listaExamenesTem = ordenExamen;
 
-      this._ordenService.Examen(this.id,this.area.id).subscribe(data=>{
+      this._ordenService.Examen(this.id,this.area.id,texto).subscribe(data=>{
         data.forEach(element => {
           this.listaExamenesTem.push(
             {
@@ -321,7 +323,7 @@ export class OrdenCrearComponent implements OnInit {
 
 ObtenerPerfiles(){
         this._perfilService.listarPerfiles().subscribe(data => {
-            
+
           this.Perfiles = data;
         });
       }
