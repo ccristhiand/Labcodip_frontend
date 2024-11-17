@@ -259,14 +259,16 @@ export class OrdenCrearComponent implements OnInit {
 
   seleccionarExamen(item: Examen){
     debugger
-    var Examenes=new Examen();
-    var existExamenSelec =  this.examenSeleccionado.filter(y=>y==item.idExamen).length;
+    var existExamenSelec =  this.listaExamenesEnvio.filter(y=>y.idExamen==item.idExamen).length;
 
     if(existExamenSelec!=0){
         item?.idExamen !== undefined && this.examenDesmarcado.push(item.idExamen);
       this.examenDesmarcado.push(item?.idExamen??'');
       this.examenSeleccionado = this.examenSeleccionado.filter(y=>y!=item.idExamen);
       this.listaExamenesEnvio=this.listaExamenesEnvio.filter(x=>x.idExamen!=item.idExamen);
+
+      const deseleccionExamen=this.listaExamenes.filter(x=>x.idExamen==item.idExamen);
+      this.cambioDeColorExamenes(deseleccionExamen,false);
     }else{
         item?.idExamen !== undefined && this.examenSeleccionado.push(item);
         this.listaExamenesEnvio.push(item);
