@@ -1,3 +1,4 @@
+import { Servicio } from './../../../../models/servicio.model';
 import { Usuario } from 'src/app/models/usuario.model';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -13,6 +14,7 @@ import { PersonaService } from 'src/app/services/persona.service';
 import { PerfilesService} from 'src/app/services/perfiles.service';
 import { Perfiles, PerfilExamenes } from 'src/app/models/perfiles.model';
 import { UsuarioService} from 'src/app/services/usuario.service';import { Examen } from 'src/app/models/examen.model';
+import { CheckboxChangeEvent } from 'primeng/checkbox';
 ;
 
 
@@ -55,7 +57,7 @@ export class OrdenCrearComponent implements OnInit {
   listaExamenesEnvio: OrdenExamen[] = [];
 
   listaExamenes: OrdenExamen[] = [];
-  examenSeleccionado: string[] = [];
+  examenSeleccionado: Examen[] = [];
   examenDesmarcado: string[] = [];
 
   primeraCarga: number = 1;
@@ -63,6 +65,7 @@ export class OrdenCrearComponent implements OnInit {
   Perfiles: Perfiles[] = [];
 
   sesion:any;
+
 
   constructor(
     private _fb: FormBuilder,
@@ -210,6 +213,10 @@ export class OrdenCrearComponent implements OnInit {
    this.obtenerExamen();
   }
 
+  ObtenerExamenes(){
+
+  }
+
   obtenerExamen(text?:Event){
    debugger
    const texto = (event?.target as HTMLInputElement)?.value || '';
@@ -228,11 +235,11 @@ export class OrdenCrearComponent implements OnInit {
               resultado: null!
             });
         });
-
+        debugger
         this.listaExamenesTem.forEach(element => {
             element.resultado = (element.resultado=="")? null!: element.resultado;
             if(element.color=='new' || element.color=='qualified' || element.color=='proposal'){
-              this.examenSeleccionado.push(element.idExamen!);
+              this.examenSeleccionado.push(element);
            }
         });
 
@@ -244,37 +251,44 @@ export class OrdenCrearComponent implements OnInit {
 
         this.examenSeleccionado = [...new Set(this.examenSeleccionado)];
         this.listaExamenes = this.listaExamenesTem;
+        this.cambioDeColorExamenes(this.listaExamenesEnvio,true);
         this._spinnerService.hide();
       });
     });
   }
 
-  sleccionarExamen(item: Examen){
+  seleccionarExamen(item: Examen){
+    debugger
+    var Examenes=new Examen();
     var existExamenSelec =  this.examenSeleccionado.filter(y=>y==item.idExamen).length;
 
     if(existExamenSelec!=0){
         item?.idExamen !== undefined && this.examenDesmarcado.push(item.idExamen);
-    //   this.examenDesmarcado.push(item?.idExamen??null);
+      this.examenDesmarcado.push(item?.idExamen??'');
       this.examenSeleccionado = this.examenSeleccionado.filter(y=>y!=item.idExamen);
       this.listaExamenesEnvio=this.listaExamenesEnvio.filter(x=>x.idExamen!=item.idExamen);
     }else{
-        item?.idExamen !== undefined && this.examenSeleccionado.push(item.idExamen);
+        item?.idExamen !== undefined && this.examenSeleccionado.push(item);
         this.listaExamenesEnvio.push(item);
-    //   this.examenSeleccionado.push(item.idExamen);
+        this.examenSeleccionado.push(item);
     }
 
-    //Cambiando el color de los botones
-    var existExamen =  this.listaExamenes.filter(y=>y.idExamen==item.idExamen)[0];
-
-    if(existExamen.color=='new' || existExamen.color=='qualified' || existExamen.color=='proposal'){
-      existExamen.color=""
-    }else{
-      existExamen.color="new"
-    }
+    this.cambioDeColorExamenes(this.listaExamenesEnvio,true);
   }
 
   guardar(){
-    this.examenSeleccionado = this.examenSeleccionado.filter(examen => !this.examenDesmarcado.includes(examen));
+
+    //quitar duplicados
+    this.examenSeleccionado =  this.examenSeleccionado.filter((item, index, self) =>
+        self.findIndex(t => t.idExamen === item.idExamen) === index
+    );
+
+    this.listaExamenesEnvio =  this.listaExamenesEnvio.filter((item, index, self) =>
+        self.findIndex(t => t.idExamen === item.idExamen) === index
+    );
+    //////////////////////////
+
+    this.examenSeleccionado = this.examenSeleccionado.filter(examen => !this.examenDesmarcado.includes(examen.idExamen??''));
     this.examenSeleccionado = Array.from(new Set(this.examenSeleccionado));
 
     if(this.listaExamenesEnvio.length>0){
@@ -300,7 +314,7 @@ export class OrdenCrearComponent implements OnInit {
       model.idOrigen=  this.validar(this.origen);
       model.cama= this.form.value['cama'];
 
-      model.listaIdOrdenExamenQuery = this.examenSeleccionado
+      model.listaIdOrdenExamenQuery = this.examenSeleccionado.map(x=>x.idExamen??'');
       model.listaOrdenExamenQuery=this.listaExamenesEnvio;
       this._spinnerService.show();
 
@@ -321,24 +335,63 @@ export class OrdenCrearComponent implements OnInit {
     return (valor==undefined || valor=="" || valor==null)? null : valor.id;
   }
 
-ObtenerPerfiles(){
-        this._perfilService.listarPerfiles().subscribe(data => {
+    ObtenerPerfiles(){
+            this._perfilService.listarPerfiles().subscribe(data => {
 
-          this.Perfiles = data;
-        });
-      }
-
-seleccionarPerfil(perfil:Perfiles){
-    debugger
-    perfil.perfilExamenes?.forEach((examen:PerfilExamenes)=>{
-        if(examen && examen.idExamen!==undefined){
-        this.sleccionarExamen(examen);
-        const index = this.listaExamenes.findIndex(item => item.idExamen === examen.idExamen);
-        this.listaExamenes[index].idperfil=perfil.idPerfil;
-        this.listaExamenes[index].nombrePerfil=perfil.nombre;
+            this.Perfiles = data;
+            });
         }
-    });
+
+    seleccionarPerfil(perfil:Perfiles,event: CheckboxChangeEvent){
+        debugger
+        var checked=event.checked;
+            if(perfil.perfilExamenes!==undefined){
+                if(checked.length>0){
+                    this.SeleccionarExamenPorPerfil(perfil.perfilExamenes);
+                }else{
+                    this.DeseleccionarExamenPorPerfil(perfil.perfilExamenes);
+                }
+            }
+        }
+
+    DeseleccionarExamenPorPerfil(ListaExamenPerfil: PerfilExamenes[]){
+        debugger
+        this.listaExamenesEnvio=this.listaExamenesEnvio.filter(x=>x.idPerfil!=ListaExamenPerfil[0].idPerfil);
+        this.cambioDeColorExamenes(ListaExamenPerfil,false);
+
+        if(this.listaExamenesEnvio.length>=0){
+            this.cambioDeColorExamenes(this.listaExamenesEnvio,true);
+        }
+    }
+
+    SeleccionarExamenPorPerfil(ListaExamenPerfil: PerfilExamenes[]){
+        debugger
+        const ExamenesNoDuplicados = ListaExamenPerfil.filter(
+            y => !this.listaExamenesEnvio.some(
+                x => x.idExamen == y.idExamen && x.idPerfil==y.idPerfil
+            )
+        );
+        this.examenSeleccionado=this.examenSeleccionado.concat(ExamenesNoDuplicados);
+        this.listaExamenesEnvio=this.listaExamenesEnvio.concat(ExamenesNoDuplicados);
+        this.cambioDeColorExamenes(ListaExamenPerfil,true);
+
+    }
+
+    cambioDeColorExamenes(ordenExamen:PerfilExamenes[],status:boolean){
+        const coincidencias = this.listaExamenes.filter(x =>
+            ordenExamen.some(y =>x.idExamen === y.idExamen
+            )
+        );
+        coincidencias.forEach(x=>{
+            if(status){
+                x.color="new";
+            }else{
+                x.color="";
+            }
+        });
+
+    }
 }
 
-}
+
 

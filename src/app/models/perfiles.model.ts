@@ -2,7 +2,8 @@ export class Perfiles{
     idPerfil?:string;
     nombre?:string;
     estado?:string;
-    perfilExamenes?:PerfilExamenes[]
+    perfilExamenes?:PerfilExamenes[];
+    selected?:boolean;
 }
 export class PerfilExamenes{
     idPerfilExamen?:string;
@@ -12,4 +13,5 @@ export class PerfilExamenes{
     nombreExamen?:string;
     abreviaturaExamen?:string;
     estado?:string;
+
 }

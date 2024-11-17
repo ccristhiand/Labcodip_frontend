@@ -31,7 +31,7 @@ export class Orden {
     examen?: string;
     resultado?: string;
     unidadMedida?: string;
-    
+
     listaOpciones!: Options[];
     listaOrdenExamenQuery!: OrdenExamen[];
     listaIdOrdenExamenQuery!: string[];
@@ -66,7 +66,7 @@ export class OrdenExamen {
     strFechaResultado?: string;
     simboloResulatdo?: string;
     validado?: boolean;
-    idperfil?:string;
+    idPerfil?:string;
     nombrePerfil?:string;
 }
 

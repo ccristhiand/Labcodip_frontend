@@ -8,7 +8,7 @@
                 <div class="my-2">
                     <span class="block mt-2 md:mt-0 p-input-icon-left">
                         <i class="pi pi-search"></i>
-                        <input pInputText type="text" (keyup.enter)="obtenerExamen($event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                        <input pInputText type="text" (keyup.enter)="obtenerExamen($event)"placeholder="Search..."  class="w-full sm:w-auto"/>
                     </span>
                 </div>
             </ng-template>
@@ -255,7 +255,7 @@
                         <p-toolbar styleClass="mb-4" >
                             <ng-template pTemplate="right" >
                                 <div class="field-checkbox mr-2" *ngFor="let item of Perfiles">
-                                    <p-checkbox [inputId]="item.idPerfil" name="group" [value]="item" (onChange)="seleccionarPerfil(item)" [disabled]="area.id!='TODOS'"></p-checkbox>
+                                    <p-checkbox [inputId]="item.idPerfil" name="group" [value]="item" (onChange)="seleccionarPerfil(item,$event)" [disabled]="area.id!='TODOS'"></p-checkbox>
                                     <label [for]="item.idPerfil">{{item.nombre}}</label>
                                 </div>
                             </ng-template>
@@ -264,9 +264,9 @@
                     </div>
 
                     <div *ngFor="let item of listaExamenes" class="col-6 mb-2 md:col-2">
-                        <p-toggleButton (onChange)="sleccionarExamen(item)" *ngIf="item.color=='' && item.resultado==null" [style]="{background:''}" onLabel="{{item.abreviatura}}" offLabel="{{item.abreviatura}}"></p-toggleButton>
-                        <p-toggleButton (onChange)="sleccionarExamen(item)" *ngIf="item.color!='' && item.resultado==null" [style]="{background:'#e931b1'}" onLabel="{{item.abreviatura}}" offLabel="{{item.abreviatura}}"></p-toggleButton>
-                        <p-toggleButton (onChange)="sleccionarExamen(item)" *ngIf="item.color!='' && item.resultado!=null" [style]="{background:'#e931b1'}" [disabled]="true" onLabel="{{item.abreviatura}}" offLabel="{{item.abreviatura}}"></p-toggleButton>
+                        <p-toggleButton (onChange)="seleccionarExamen(item)" *ngIf="item.color=='' && item.resultado==null" [style]="{background:''}" onLabel="{{item.abreviatura}}" offLabel="{{item.abreviatura}}"></p-toggleButton>
+                        <p-toggleButton (onChange)="seleccionarExamen(item)" *ngIf="item.color!='' && item.resultado==null" [style]="{background:'#e931b1'}" onLabel="{{item.abreviatura}}" offLabel="{{item.abreviatura}}"></p-toggleButton>
+                        <p-toggleButton (onChange)="seleccionarExamen(item)" *ngIf="item.color!='' && item.resultado!=null" [style]="{background:'#e931b1'}" [disabled]="true" onLabel="{{item.abreviatura}}" offLabel="{{item.abreviatura}}"></p-toggleButton>
                     </div>
                 </div>
             </p-tabPanel>

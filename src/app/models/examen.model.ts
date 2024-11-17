@@ -18,6 +18,7 @@ export class Examen extends SilacConfig {
     tiempoTrackingMin?:number;
     orden?:number;
     estadoPerfil?:boolean;
+    idPerfil?:string;
 
     listaOpciones?: Options[];
     listaExamenRango?: ExamenRango[];
