@@ -122,20 +122,19 @@ export class PerfilesComponent implements OnInit {
       }
 
       EditarPerfil(Perfiles?: Perfiles) {
-        debugger
           this.id = (Perfiles==undefined)? "": Perfiles.idPerfil!;
           if(Perfiles!=undefined){
             this._spinnerService.show();
             this._perfilesService.ObtenerPerfiles(this.id!).subscribe(data=>{
 
                 if(this.id!=""){
-      
+
                   this.form.patchValue({
                     nombre: data.nombre
                   });
-      
+
                   this.formTitulo = "EDITAR PERFIL";
-      
+
                 }else{
                   this.form.patchValue({
                     nombre: null
