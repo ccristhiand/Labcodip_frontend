@@ -85,7 +85,7 @@ export class UsuarioCrearComponent implements OnInit {
 
         this.listaRoles = data.listaRoles as TreeNode[];
         this.listaAreas = data.listaLaboratorios as TreeNode[];
-
+       
         if(this.id!=""){
           this.form.patchValue({
             idTipoDocu: data.idTipoDocu,
@@ -102,6 +102,7 @@ export class UsuarioCrearComponent implements OnInit {
           
           this.selectedRol = this.listaRoles.filter(y=>y.key==data.listaUsuarioRol[0]);
           this.selectedAreas =   data.laboratorioSelect as TreeNode[];
+          this.escritura = (data.permiso_Escritura==null)? false : data.permiso_Escritura;
 
         }else{
           this.form.patchValue({
@@ -116,12 +117,12 @@ export class UsuarioCrearComponent implements OnInit {
             userName: null,
             password: null
           });  
+          this.escritura = true
         }
 
         this.tipoDocu = (data.idTipoDocu==null)? this.listaTipodocumento[0] : this.listaTipodocumento.filter(y=>y.id==data.idTipoDocu)[0];
         this.sexo = (data.idSexo==null)? this.listaSexo[0] : this.listaSexo.filter(y=>y.id==data.idSexo)[0];
         this.essi = (data.codExterno==null || data.codExterno=="")? false : true;
-        this.escritura = (data.permiso_Escritura==null)? false : data.permiso_Escritura;
 
         this._spinnerService.hide();
       });
