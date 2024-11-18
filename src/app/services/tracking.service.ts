@@ -22,6 +22,7 @@ export class trackingService {
     private url: string = `${environment.UrlApi5}/tracking`;
     //------declarando los metodo para invocar al api
     Obtener(DateInit:string,DateFin:string,text?:string, page?: number, pages?: number){
+      debugger;
        let urls = `${this.url}?dateInit=${DateInit}&dateFin=${DateFin}&text=${text}&page=${page}&pages=${pages}`;
        return this.http.get<Datacollection>(urls)
             .toPromise()

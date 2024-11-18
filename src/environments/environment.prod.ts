@@ -3,20 +3,20 @@ export const environment = {
   
 
     //******DESARROLLO*********
-  UrlApi1:'http://localhost:5180/api',  //security
-  UrlApi2:'http://localhost:5183/api',  //laboratorio
-  UrlApi3:'http://localhost:5018/api',  //configuracion
-  UrlApi4:'http://localhost:5247/api',  //report
-  UrlApi5:'http://localhost:5122/api', //tracking
-  UrlApi6:'http://localhost:5073/api', //qc
+  // UrlApi1:'http://localhost:5180/api',  //security
+  // UrlApi2:'http://localhost:5183/api',  //laboratorio
+  // UrlApi3:'http://localhost:5018/api',  //configuracion
+  // UrlApi4:'http://localhost:5247/api',  //report
+  // UrlApi5:'http://localhost:5122/api', //tracking
+  // UrlApi6:'http://localhost:5073/api', //qc
   
      //******PRODUCCION*********
-  // UrlApi1:'https://netcodip.com:8010/api',  //security
-  // UrlApi2:'https://netcodip.com:8020/api',  //laboratorio
-  // UrlApi3:'https://netcodip.com:8030/api',  //configuracion
-  // UrlApi4:'https://netcodip.com:8040/api',  //report
-  // UrlApi5:'https://netcodip.com:8050/api',  //tracking
-  // UrlApi6:'https://netcodip.com:8060/api',  //qc
+  UrlApi1:'https://netcodip.com:8010/api',  //security
+  UrlApi2:'https://netcodip.com:8020/api',  //laboratorio
+  UrlApi3:'https://netcodip.com:8030/api',  //configuracion
+  UrlApi4:'https://netcodip.com:8040/api',  //report
+  UrlApi5:'https://netcodip.com:8050/api',  //tracking
+  UrlApi6:'https://netcodip.com:8060/api',  //qc
 
   UrlImage:'assets/',
 

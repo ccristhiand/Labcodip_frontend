@@ -35,7 +35,7 @@ export class TrackingListarComponent {
     this.FechaFin.setHours(12, 0, 0, 0);
     this.ListaTrackingTemporal=setInterval(()=>{
       this.obtener();
-    },60000)
+    },10000)
   }
   
   obtener(){
