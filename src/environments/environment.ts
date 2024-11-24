@@ -18,7 +18,6 @@ export const environment = {
    UrlApi6:'https://netcodip.com:8060/api',  //qc
 
 
-
   UrlImage:'assets/',
 
   Access_Token: 'access_token',

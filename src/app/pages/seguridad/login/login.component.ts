@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { MessageService } from 'primeng/api';
 import { SpinnerService } from '../../components/spinner/spinner.service';
+import { WebSocketService } from 'src/app/services/websocket.service';
 
 
 @Component({
@@ -26,7 +27,8 @@ export class LoginComponent implements OnInit{
 		private _usuarioService:UsuarioService,
 		public _layoutService: LayoutService,
 		private _messageService: MessageService,
-		private _spinnerService: SpinnerService
+		private _spinnerService: SpinnerService,
+		private _webSocketService: WebSocketService
 		) {}
 
 	ngOnInit() {
@@ -67,6 +69,9 @@ export class LoginComponent implements OnInit{
 
 			if(data.typeResponse==environment.EXITO){
 			  localStorage.setItem(environment.Access_Token, data.access_token!);
+
+			  this._webSocketService.connect(data.idUser!);
+
 			  this._router.navigate(['/laboratorio/orden']);
 			}
 			this._spinnerService.hide();
