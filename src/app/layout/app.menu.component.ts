@@ -41,8 +41,11 @@ export class AppMenuComponent implements OnInit {
 
     ngOnInit() {
         let session = this.usuarioService.SessionUsuario();
+        let idrol = session==null? null: session.idrol;
 
-        this.obtener(session.idrol);
+        if(idrol!=null){
+            this.obtener(idrol);
+        }
     }
     obtener(idRol:string){
 

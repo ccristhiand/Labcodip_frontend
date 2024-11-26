@@ -3,10 +3,6 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { environment } from 'src/environments/environment';
-import { Datacollection } from '../models/utils/datacollection.model';
-import { Login, TokenUsuario, Usuario } from '../models/usuario.model';
-import { Responses } from '../models/utils/responses.model';
-import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'
@@ -16,18 +12,20 @@ export class WebSocketService  {
   constructor(
     private router: Router,
     private http: HttpClient
-  ) { }
+    ) { }
 
     private socket!: WebSocket;
 
     private url = environment.UrlApi1.replace('api', 'ws');
 
-    connect(idUser: string): void {
-      this.socket = new WebSocket(`${this.url}?userId=${idUser}`);
+    // private url = 'wss://netcodip.com:8010/ws';
+
+    connect(id: string): void {
+      this.socket = new WebSocket(`${this.url}?userId=${id}`);
   
       this.socket.onmessage = (event) => {
-        if (event.data === 'logout') {
-          this.handleLogout();
+        if (event.data == 'logout-warning') {
+          this.showLogoutWarning();
         }
       };
   
@@ -44,7 +42,7 @@ export class WebSocketService  {
       };
     }
   
-    private handleLogout(): void {
+    private showLogoutWarning(): void {
       localStorage.removeItem('access_token');
       this.router.navigate(['/login']);
     }

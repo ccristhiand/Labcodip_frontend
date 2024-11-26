@@ -21,6 +21,7 @@ export class LoginComponent implements OnInit{
 	rememberMe: boolean = false;
 	input: any;
     showPassword: boolean = false;
+	displayModal: boolean = false;
 	constructor(
 		private _fb: FormBuilder,
 		private _router: Router,
@@ -69,8 +70,8 @@ export class LoginComponent implements OnInit{
 
 			if(data.typeResponse==environment.EXITO){
 			  localStorage.setItem(environment.Access_Token, data.access_token!);
-
-			  this._webSocketService.connect(data.idUser!);
+			  
+			  this._webSocketService.connect(data.id!);
 
 			  this._router.navigate(['/laboratorio/orden']);
 			}
@@ -86,4 +87,14 @@ export class LoginComponent implements OnInit{
       togglePasswordVisibility() {
         this.showPassword = !this.showPassword;
       }
+
+	  logout() {
+		localStorage.removeItem('access_token');
+		this._router.navigate(['/login']);
+		this.displayModal = false; // Cerrar el modal
+	  }
+
+	  stayLoggedIn() {
+		this.displayModal = false; // Cerrar el modal sin hacer nada
+	  }
 }

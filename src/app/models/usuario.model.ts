@@ -51,7 +51,7 @@ export class TokenUsuario {
     summary?: string;
     message?: string;
     access_token?: string;
-    idUser?: string;
+    id?: string;
 }
 
 export class Login {

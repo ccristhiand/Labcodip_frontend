@@ -9,6 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppConfigModule } from 'src/app/layout/config/app.config.module';
 import { ToastModule } from 'primeng/toast';
 import { SpinnerComponent } from '../../components/spinner/spinner.component';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
     imports: [
@@ -21,7 +22,8 @@ import { SpinnerComponent } from '../../components/spinner/spinner.component';
         ReactiveFormsModule,
         AppConfigModule,
         ToastModule,
-        SpinnerComponent
+        SpinnerComponent,
+        DialogModule
     ],
    
     declarations: [LoginComponent]

@@ -69,3 +69,12 @@
         </div>
     </div>
 </div>
+
+<p-dialog header="Confirmar Cierre de Sesión" [(visible)]="displayModal" [modal]="true" [closable]="false">
+    <p>Tu sesión ha sido iniciada en otro navegador. ¿Deseas cerrar esta sesión?</p>
+    <p-footer>
+      <button type="button" pButton label="Cerrar sesión" (click)="logout()" icon="pi pi-times"></button>
+      <button type="button" pButton label="Seguir conectado" (click)="stayLoggedIn()" icon="pi pi-check"></button>
+    </p-footer>
+  </p-dialog>
+  
