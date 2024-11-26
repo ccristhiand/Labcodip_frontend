@@ -241,4 +241,7 @@ export class OrdenValidarComponent implements OnInit {
         this._spinnerService.hide();
     });
   }
+  isNotNumber(value: any): boolean {
+    return /^\d+$/.test(value) && value!=null;
+  }
 }

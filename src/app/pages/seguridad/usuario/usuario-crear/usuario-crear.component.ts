@@ -7,6 +7,7 @@ import { Usuario } from 'src/app/models/usuario.model';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { environment } from 'src/environments/environment';
 import { SpinnerService } from 'src/app/pages/components/spinner/spinner.service';
+import { PersonaService } from 'src/app/services/persona.service';
 
 interface Image {
   name: string;
@@ -32,7 +33,7 @@ export class UsuarioCrearComponent implements OnInit {
   listaSexo!: Options[];
   sexo: any;
 
-  
+
   listaRoles: TreeNode[] = [];
   selectedRol: TreeNode<any> | TreeNode<any>[] | any[] | any;
 
@@ -45,18 +46,19 @@ export class UsuarioCrearComponent implements OnInit {
     private _router: Router,
     private _usuarioService:UsuarioService,
     private _messageService: MessageService,
+    private _personaService:PersonaService,
     private _spinnerService: SpinnerService) {
   }
-  
+
   ngOnInit() {
     this._activeRoute.params.subscribe((data: Params)=>{
       this.id = (data["id"]==undefined)? "":data["id"];
-      this.edit = (data["edit"]==undefined) ? true : ((data["edit"]=='true') ? true : false)      
+      this.edit = (data["edit"]==undefined) ? true : ((data["edit"]=='true') ? true : false)
     });
 
     this.inicializar();
   }
-  
+
 
   inicializar(){
     this.form = this._fb.group({
@@ -81,11 +83,11 @@ export class UsuarioCrearComponent implements OnInit {
         this._spinnerService.show();
         this._usuarioService.Obtener(this.id).subscribe(data=>{
         this.listaSexo = data.listaOpciones!.filter(x=>x.tipo==environment.Sexo);
-        this.listaTipodocumento = data.listaOpciones!.filter(x=>x.tipo==environment.TipoDocumento);  
+        this.listaTipodocumento = data.listaOpciones!.filter(x=>x.tipo==environment.TipoDocumento);
 
         this.listaRoles = data.listaRoles as TreeNode[];
         this.listaAreas = data.listaLaboratorios as TreeNode[];
-       
+
         if(this.id!=""){
           this.form.patchValue({
             idTipoDocu: data.idTipoDocu,
@@ -95,11 +97,11 @@ export class UsuarioCrearComponent implements OnInit {
             nombre: data.nombre,
             idSexo: data.idSexo,
             fechaNacimiento: new Date(data.fechaNacimiento!),
-            edad: data.edad,  
+            edad: data.edad,
             userName: data.userName,
             password: data.password
-          }); 
-          
+          });
+
           this.selectedRol = this.listaRoles.filter(y=>y.key==data.listaUsuarioRol[0]);
           this.selectedAreas =   data.laboratorioSelect as TreeNode[];
           this.escritura = (data.permiso_Escritura==null)? false : data.permiso_Escritura;
@@ -116,7 +118,7 @@ export class UsuarioCrearComponent implements OnInit {
             edad: null,
             userName: null,
             password: null
-          });  
+          });
           this.escritura = true
         }
 
@@ -140,7 +142,7 @@ export class UsuarioCrearComponent implements OnInit {
     model.apeMaterno= this.form.value['apeMaterno'];
     model.nombre= this.form.value['nombre'];
     model.idSexo=  this.sexo.id;
-    model.fechaNacimiento= this.form.value['fechaNacimiento'];    
+    model.fechaNacimiento= this.form.value['fechaNacimiento'];
     model.userName= this.form.value['userName'];
     model.password= this.form.value['password'];
     model.codExterno= this.form.value['essi']? this.form.value['nroDocumento']:null;
@@ -167,7 +169,7 @@ export class UsuarioCrearComponent implements OnInit {
           if(data.typeResponse==environment.EXITO){
             this._router.navigate(['/seguridad/usuario']);
           }
-        }) 
+        })
         this._spinnerService.hide();
     }else{
       this._messageService.add({key: "tst", severity: "warn", summary: "ADVERTENCIA", detail: "Seleccione el PERFIL y el AREA"});
@@ -209,5 +211,32 @@ private convertToByteArray(base64String: string): Uint8Array {
   }
 
   return bytes;
+}
+buscarPersona(){
+    this._spinnerService.show();
+    let nroDocumento = this.form.value['nroDocumento'];
+    this._personaService.Obtener(nroDocumento).subscribe(data=>{
+      if(data !=null){
+        this.form.patchValue({
+          apePaterno: data.apePaterno,
+          apeMaterno: data.apeMaterno,
+          nombre: data.nombre,
+          fechaNacimiento: new Date(data.fechaNacimiento!),
+          edad: data.edad,
+        });
+        this.sexo = this.listaSexo.filter(y=>y.id==data.idSexo)[0];
+    }else{
+      this.form.patchValue({
+        apePaterno: null,
+        apeMaterno: null,
+        nombre: null,
+        fechaNacimiento: null,
+        edad: null,
+        fechaOrden: new Date(),
+      });
+      this.sexo = this.listaSexo[0];
+    };
+    this._spinnerService.hide();
+  })
 }
 }

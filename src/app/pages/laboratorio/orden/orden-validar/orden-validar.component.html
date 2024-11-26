@@ -1,12 +1,12 @@
 <div [formGroup]="form" #frmGrupo="ngForm">
     <div class="card">
         <h5>VALIDAR ORDEN</h5>
-        
+
         <p-toast key="tst"></p-toast>
         <p-toolbar styleClass="mb-4">
             <ng-template pTemplate="left">
             </ng-template>
-    
+
             <ng-template pTemplate="right">
                 <button pButton pRipple label="Atrás" icon="pi pi-step-backward" class="p-button-secondary mr-2" [routerLink]="['/laboratorio/orden']"></button>
                 <button *ngIf="sesion.permisoEscritura=='True'" pButton pRipple label="Guardar" icon="pi pi-save" class="p-button-success mr-2" (click)="guardar()" [disabled]="frmGrupo.invalid" ></button>
@@ -16,7 +16,7 @@
                 <button pButton pRipple label="Resultado" icon="pi pi-print" class="p-button-info mr-2" (click)="imprimirResultado()"></button>
             </ng-template>
         </p-toolbar>
-        
+
         <div class="grid p-fluid">
 
             <div class="col-12 md:col-4">
@@ -61,7 +61,7 @@
                 </div>
             </div>
 
-            <div class="col-12 md:col-4">      
+            <div class="col-12 md:col-4">
                 <div class="field mt-3 space">
                     <span class="p-float-label">
                         <p-calendar
@@ -70,7 +70,7 @@
                         ></p-calendar>
                         <label for="calendar">FECHA ORDEN</label>
                     </span>
-                </div>              
+                </div>
                 <div class="field space">
                     <span class="p-float-label">
                         <input
@@ -82,16 +82,16 @@
                         />
                         <label for="inputtext">CAMA</label>
                     </span>
-                </div>  
+                </div>
                 <div class="field space">
                     <span class="p-float-label">
                         <textarea rows="5" cols="30" placeholder="Observacion" formControlName="observacion" pInputTextarea></textarea>
                         <label for="inputtext">OBSERVACIÓN</label>
                     </span>
-                </div>              
+                </div>
             </div>
 
-            <div class="col-12 md:col-4">   
+            <div class="col-12 md:col-4">
                 <div class="field mt-3 space">
                     <span class="p-float-label">
                         <p-dropdown
@@ -104,7 +104,7 @@
                         ></p-dropdown>
                         <label for="dropdown">PROCEDENCIA</label>
                     </span>
-                </div>    
+                </div>
                 <div class="field space">
                     <span class="p-float-label">
                         <p-dropdown
@@ -131,11 +131,11 @@
                         <label for="dropdown">MEDICO</label>
                     </span>
                 </div>
-                                
+
             </div>
 
         </div>
-        
+
         <div class="grid p-fluid">
             <div class="col-12 md:col-12">
                 <p-table #dt1 [value]="datacollection" dataKey="id" [rows]="100" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" responsiveLayout="scroll">
@@ -146,9 +146,9 @@
                             <th style="min-width: 8rem" pSortableColumn="codigo">Examen <p-sortIcon field="codigo"></p-sortIcon></th>
                             <th style="min-width: 4rem" pSortableColumn="userName">F.Resultado <p-sortIcon field="userName"></p-sortIcon></th>
                             <th style="min-width: 4rem" pSortableColumn="userName">Resultado <p-sortIcon field="userName"></p-sortIcon></th>
-                            <th style="min-width: 4rem" pSortableColumn="nombre">FLG <p-sortIcon field="nombre"></p-sortIcon></th>
+                            <!-- <th style="min-width: 4rem" pSortableColumn="nombre">FLG <p-sortIcon field="nombre"></p-sortIcon></th> -->
                             <th style="min-width: 10rem" pSortableColumn="estado">U.M <p-sortIcon field="estado"></p-sortIcon></th>
-                            <th style="min-width: 12rem" pSortableColumn="estado">Rango Mostrar <p-sortIcon field="estado"></p-sortIcon></th>						
+                            <th style="min-width: 12rem" pSortableColumn="estado">Rango Mostrar <p-sortIcon field="estado"></p-sortIcon></th>
                             <!-- <th style="min-width: 12rem" pSortableColumn="accion">Acciones</th>				 -->
                         </tr>
                     </ng-template>
@@ -163,35 +163,36 @@
                             <td>
                                 <span class="image-text ml-2">{{data.nombreExamen}}</span>
                             </td>
-                            <td>    
+                            <td>
                                 <span class="image-text ml-2">{{data.strFechaResultado}}</span>
                             </td>
                             <td>
                                 <span class="image-text ml-2" style="display: flex;">
-                                    <input  pInputText [disabled]="data.validado || sesion.permisoEscritura=='False'"  type="text" 
+                                    <input  pInputText [disabled]="data.validado || sesion.permisoEscritura=='False'"  type="text"
                                     style="width: 100px; text-align: right;" value="{{data.resultado}}" (change)="guardarResultado($event, data.idOrdenExamen)">
-                                    <i class="pi {{data.simboloResulatdo}}" style="color: red;"></i>
+                                    <i *ngIf="isNotNumber(data.resultado)" class="pi {{data.simboloResulatdo}} " style="color: red; font-weight: bold; margin-top: 8px; margin-left: 10px;"></i>
+                                    <i *ngIf="isNotNumber(data.resultado) && data.simboloResulatdo==''" class="pi pi-check" style="color: green; font-weight: bold; margin-top: 8px; margin-left: 10px;"></i>
                                 </span>
-                            </td>	
-                            <td>
-                                <span class="image-text ml-2"></span>
                             </td>
+                            <!-- <td>
+                                <span class="image-text ml-2"></span>
+                            </td> -->
                             <td>
                                 <span class="image-text ml-2">{{data.unidadMedida}}</span>
                             </td>
                             <td>
                                 <span class="image-text ml-2">{{data.referencia}}</span>
-                            </td>						
+                            </td>
                             <!-- <td>
                                 <div class="flex flex-wrap gap-2">
-                                   
+
                                 </div>
                             </td> -->
                         </tr>
                     </ng-template>
-                   
+
                 </p-table>
-            </div>         
+            </div>
         </div>
     </div>
 </div>

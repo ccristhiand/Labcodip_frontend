@@ -39,19 +39,18 @@
                         </div>
                         <div class="field mt-3 space">
                             <p-inputGroup>
-                            <span class="p-float-label">
-                                <input
-                                    type="text"
-                                    id="inputtext"
-                                    pInputText
-                                    formControlName="nroDocumento"
-                                    maxlength="15"
-                                    (keyup.enter)="buscarPersona()"
-                                />
-                                <label for="inputtext">NRO DOCUMENTO</label>
-                            </span>
-                            <button type="button"  (click)="buscarPersona()" pButton label="Buscar"></button>
-                        </p-inputGroup>
+                                <span class="p-float-label">
+                                    <input
+                                        type="text"
+                                        id="inputtext"
+                                        pInputText
+                                        formControlName="nroDocumento"
+                                        maxlength="15"
+                                    />
+                                    <label for="inputtext">NRO DOCUMENTO</label>
+                                </span>
+                                <button type="button"  (click)="buscarPersona()" pButton label="Buscar"></button>
+                            </p-inputGroup>
                         </div>
                         <div class="field space">
                             <span class="p-float-label">

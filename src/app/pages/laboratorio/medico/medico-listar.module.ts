@@ -15,6 +15,7 @@ import { ToastModule } from 'primeng/toast';
 
 import { MedicoListarRoutingModule } from './medico-listar-routing.module';
 import { MedicoListarComponent } from './medico-listar.component';
+import { InputGroupModule } from 'primeng/inputgroup';
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import { MedicoListarComponent } from './medico-listar.component';
     DropdownModule,
     ToolbarModule,
     DialogModule,
+    InputGroupModule,
     ToastModule,
   ]
 })

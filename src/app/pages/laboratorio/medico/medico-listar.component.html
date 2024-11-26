@@ -28,7 +28,7 @@
 						<th style="min-width: 12rem" pSortableColumn="nombre">Datos <p-sortIcon field="nombre"></p-sortIcon></th>
 						<th style="min-width: 12rem" pSortableColumn="nroDocumento">Nro Documento <p-sortIcon field="nroDocumento"></p-sortIcon></th>
 						<th style="min-width: 12rem" pSortableColumn="estado">Estado <p-sortIcon field="estado"></p-sortIcon></th>
-						<th style="min-width: 12rem" pSortableColumn="accion">Acciones</th>				
+						<th style="min-width: 12rem" pSortableColumn="accion">Acciones</th>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="body" let-data>
@@ -38,7 +38,7 @@
 						</td>
 						<td>
 							<span class="image-text ml-2">{{data.nombreCompleto}}</span>
-						</td>					
+						</td>
 						<td>
 							<span class="image-text ml-2">{{data.nroDocumento}}</span>
 						</td>
@@ -87,16 +87,19 @@
                                 </span>
                             </div>
                             <div class="field space">
-                                <span class="p-float-label">
-                                    <input
-                                        type="text"
-                                        id="inputtext"
-                                        pInputText
-                                        formControlName="nroDocumento"
-                                        maxlength="15"
-                                    />
-                                    <label for="inputtext">NRO DOCUMENTO</label>
-                                </span>
+                                <p-inputGroup>
+                                    <span class="p-float-label">
+                                        <input
+                                            type="text"
+                                            id="inputtext"
+                                            pInputText
+                                            formControlName="nroDocumento"
+                                            maxlength="15"
+                                        />
+                                        <label for="inputtext">NRO DOCUMENTO</label>
+                                    </span>
+                                    <button type="button"  (click)="buscarPersona()" pButton label="Buscar"></button>
+                                </p-inputGroup>
                             </div>
                             <div class="field space">
                                 <span class="p-float-label">
@@ -135,16 +138,16 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="col-12 md:col-6">                            
+                        <div class="col-12 md:col-6">
                             <div class="field mt-4 space">
                                 <span class="p-float-label">
                                     <p-calendar
                                         inputId="calendar"
                                         formControlName="fechaNacimiento"
-                                        dateFormat="dd/mm/yy" 
+                                        dateFormat="dd/mm/yy"
                                     ></p-calendar>
                                     <label for="calendar">FECHA NACIMIENTO</label>
-                                </span>                               
+                                </span>
                             </div>
                             <div class="field space">
                                 <span class="p-float-label">
@@ -168,7 +171,7 @@
                         </div>
                     </div>
                 </ng-template>
-    
+
                 <ng-template pTemplate="footer">
                     <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="cerrar()"></button>
                     <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text" (click)="guardar()" [disabled]="frmGrupo.invalid"></button>

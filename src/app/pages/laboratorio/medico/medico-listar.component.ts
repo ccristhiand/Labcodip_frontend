@@ -9,6 +9,7 @@ import { Options } from 'src/app/models/utils/options.model';
 import { Medico } from 'src/app/models/medico.model';
 import { MedicoService } from 'src/app/services/medico.service';
 import { SpinnerService } from '../../components/spinner/spinner.service';
+import { PersonaService } from 'src/app/services/persona.service';
 
 @Component({
   selector: 'app-medico-listar',
@@ -41,7 +42,8 @@ export class MedicoListarComponent implements OnInit {
     private _fb: FormBuilder,
     private _medicoService:MedicoService,
     private _messageService: MessageService,
-    private _spinnerService: SpinnerService
+    private _spinnerService: SpinnerService,
+    private _personaService:PersonaService,
   ) { }
 
   ngOnInit() {
@@ -54,7 +56,7 @@ export class MedicoListarComponent implements OnInit {
     this.listar();
   }
 
-  listar(){   
+  listar(){
     this._medicoService.listar(this.valor,0,0).then(data => {
       this.datacollection = data;
       this.loading = false;
@@ -79,9 +81,9 @@ export class MedicoListarComponent implements OnInit {
 
       this._spinnerService.show();
       this._medicoService.Obtener(this.id!,"1","1").subscribe(data=>{
-      this.listaTipodocumento = data.listaOpciones!.filter(x=>x.tipo==environment.TipoDocumento); 
+      this.listaTipodocumento = data.listaOpciones!.filter(x=>x.tipo==environment.TipoDocumento);
       this.listaSexo = data.listaOpciones!.filter(x=>x.tipo==environment.Sexo);
-      
+
       if(this.id!=""){
 
         this.form.patchValue({
@@ -93,7 +95,7 @@ export class MedicoListarComponent implements OnInit {
           idSexo: data.idSexo,
           fechaNacimiento: new Date(data.fechaNacimiento!),
           edad: data.edad
-        });  
+        });
       }else{
         this.form.patchValue({
           idTipoDocu: null,
@@ -104,8 +106,8 @@ export class MedicoListarComponent implements OnInit {
           idSexo: null,
           fechaNacimiento: new Date(),
           edad: null
-        });  
-      }      
+        });
+      }
 
       this.tipoDocu = (data.idTipoDocu==null)? this.listaTipodocumento[0] : this.listaTipodocumento.filter(y=>y.id==data.idTipoDocu)[0];
       this.sexo = (data.idSexo==null)?this.listaSexo[0] : this.listaSexo.filter(y=>y.id==data.idSexo)[0];
@@ -115,7 +117,7 @@ export class MedicoListarComponent implements OnInit {
       this._spinnerService.hide();
     });
   }
- 
+
   cambiarEstado(medico: Medico) {
     this.deleteMedicoDialog = true;
     this.medico = { ...medico };
@@ -141,7 +143,7 @@ export class MedicoListarComponent implements OnInit {
           this.listar();
         }
         this._spinnerService.hide();
-      }) 
+      })
     }else{
       this._medicoService.CambiarEstado(id).subscribe(data=>{
         this._messageService.add({key: data.key, severity: data.typeResponse, summary: data.summary, detail: data.message});
@@ -149,7 +151,7 @@ export class MedicoListarComponent implements OnInit {
           this.listar();
         }
         this._spinnerService.hide();
-      }) 
+      })
     }
   }
 
@@ -163,9 +165,9 @@ export class MedicoListarComponent implements OnInit {
     model.apeMaterno= this.form.value['apeMaterno'];
     model.nombre= this.form.value['nombre'];
     model.idSexo=  this.sexo.id;
-    model.fechaNacimiento= this.form.value['fechaNacimiento']; 
-    model.idLaboratorio= "1"; 
-    model.idArea= "1";    
+    model.fechaNacimiento= this.form.value['fechaNacimiento'];
+    model.idLaboratorio= "1";
+    model.idArea= "1";
 
     this._spinnerService.show();
     this._medicoService.Guardar(model.idMedico, model).subscribe(data=>{
@@ -175,12 +177,39 @@ export class MedicoListarComponent implements OnInit {
           this.listar();
         }
         this._spinnerService.hide();
-      }) 
+      })
   }
 
   cerrar(){
     this.medicoDialog = false;
   }
-  
+  buscarPersona(){
+    this._spinnerService.show();
+    let nroDocumento = this.form.value['nroDocumento'];
+    this._personaService.Obtener(nroDocumento).subscribe(data=>{
+      if(data !=null){
+        this.form.patchValue({
+          apePaterno: data.apePaterno,
+          apeMaterno: data.apeMaterno,
+          nombre: data.nombre,
+          fechaNacimiento: new Date(data.fechaNacimiento!),
+          edad: data.edad,
+        });
+        this.sexo = this.listaSexo.filter(y=>y.id==data.idSexo)[0];
+    }else{
+      this.form.patchValue({
+        apePaterno: null,
+        apeMaterno: null,
+        nombre: null,
+        fechaNacimiento: null,
+        edad: null,
+        fechaOrden: new Date(),
+      });
+      this.sexo = this.listaSexo[0];
+    };
+    this._spinnerService.hide();
+  })
+}
+
 }
 

@@ -1,7 +1,7 @@
 <div [formGroup]="form" #frmGrupo="ngForm">
 <div class="card">
     <h5>CREAR USUARIO</h5>
-    
+
     <p-toast key="tst"></p-toast>
     <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
@@ -12,7 +12,7 @@
             <button pButton pRipple label="Guardar" icon="pi pi-save" class="p-button-success mr-2" (click)="guardar()" [disabled]="frmGrupo.invalid" ></button>
         </ng-template>
     </p-toolbar>
-    
+
     <p-tabView orientation="left">
         <p-tabPanel header="USUARIO" class="line-height-6 m-2">
             <div class="grid p-fluid">
@@ -32,16 +32,19 @@
                         </span>
                     </div>
                     <div class="field mt-3 space">
-                        <span class="p-float-label">
-                            <input
-                                type="text"
-                                id="inputtext"
-                                pInputText
-                                formControlName="nroDocumento"
-                                maxlength="15"
-                            />
-                            <label for="inputtext">NRO DOCUMENTO</label>
-                        </span>
+                        <p-inputGroup>
+                            <span class="p-float-label">
+                                <input
+                                    type="text"
+                                    id="inputtext"
+                                    pInputText
+                                    formControlName="nroDocumento"
+                                    maxlength="15"
+                                />
+                                <label for="inputtext">NRO DOCUMENTO</label>
+                            </span>
+                            <button type="button"  (click)="buscarPersona()" pButton label="Buscar"></button>
+                        </p-inputGroup>
                     </div>
                     <div class="field space">
                         <span class="p-float-label">
@@ -80,8 +83,8 @@
                         </span>
                     </div>
                 </div>
-                
-                <div class="col-12 md:col-4">                    
+
+                <div class="col-12 md:col-4">
                     <div class="field mt-3 space">
                         <span class="p-float-label">
                             <p-dropdown
@@ -100,7 +103,7 @@
                             <p-calendar
                                 inputId="calendar"
                                 formControlName="fechaNacimiento"
-                                dateFormat="dd/mm/yy" 
+                                dateFormat="dd/mm/yy"
                             ></p-calendar>
                             <label for="calendar">FECHA NACIMIENTO</label>
                         </span>
@@ -121,14 +124,14 @@
                     <div class="field space">
                         <div class="card">
                             <h5>FIRMA</h5>
-                            
+
                         </div>
                     </div>
-        
+
 
                 </div>
 
-                <div class="col-12 md:col-4">                    
+                <div class="col-12 md:col-4">
                     <div class="field mt-3 space">
                         <span class="p-float-label">
                             <input
@@ -154,7 +157,7 @@
                         </span>
                     </div>
                     <div class="field grid">
-                        
+
                             <label htmlFor="name3" class="col-4 mb-4 md:col-4 md:mb-0">ENVIAR AL ESSI</label>
                             <div class="col-4 md:col-4">
                                 <p-toggleButton formControlName="essi" [(ngModel)]="essi" onLabel="Yes" offLabel="No"
@@ -163,7 +166,7 @@
                     </div>
 
                     <div class="field grid">
-                        
+
                         <label htmlFor="name3" class="col-4 mb-4 md:col-4 md:mb-0">PERMISO ESCRITURA</label>
                         <div class="col-4 md:col-4">
                             <p-toggleButton formControlName="escritura" [(ngModel)]="escritura" onLabel="Yes" offLabel="No"
@@ -175,7 +178,7 @@
             </div>
         </p-tabPanel>
 
-        
+
         <p-tabPanel header="ROLES" class="line-height-3 m-0">
             <div class="grid p-fluid">
                 <div class="col-12 md:col-4">
@@ -206,10 +209,10 @@
                     <p-tree [value]="listaAreas" selectionMode="checkbox" [(selection)]="selectedAreas"></p-tree>
                 </div>
             </div>
-            
-           
+
+
         </p-tabPanel>
     </p-tabView>
-    
+
 </div>
 </div>

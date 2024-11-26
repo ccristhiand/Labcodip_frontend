@@ -218,7 +218,6 @@ export class OrdenCrearComponent implements OnInit {
   }
 
   obtenerExamen(text?:Event){
-   debugger
    const texto = (event?.target as HTMLInputElement)?.value || '';
     this._spinnerService.show();
     this._ordenService.ObtenerExamen(this.id,this.area.id).subscribe(ordenExamen=>{
@@ -235,7 +234,6 @@ export class OrdenCrearComponent implements OnInit {
               resultado: null!
             });
         });
-        debugger
         this.listaExamenesTem.forEach(element => {
             element.resultado = (element.resultado=="")? null!: element.resultado;
             if(element.color=='new' || element.color=='qualified' || element.color=='proposal'){
@@ -258,7 +256,6 @@ export class OrdenCrearComponent implements OnInit {
   }
 
   seleccionarExamen(item: Examen){
-    debugger
     var existExamenSelec =  this.listaExamenesEnvio.filter(y=>y.idExamen==item.idExamen).length;
 
     if(existExamenSelec!=0){
@@ -345,7 +342,6 @@ export class OrdenCrearComponent implements OnInit {
         }
 
     seleccionarPerfil(perfil:Perfiles,event: CheckboxChangeEvent){
-        debugger
         var checked=event.checked;
             if(perfil.perfilExamenes!==undefined){
                 if(checked.length>0){
@@ -357,7 +353,6 @@ export class OrdenCrearComponent implements OnInit {
         }
 
     DeseleccionarExamenPorPerfil(ListaExamenPerfil: PerfilExamenes[]){
-        debugger
         this.listaExamenesEnvio=this.listaExamenesEnvio.filter(x=>x.idPerfil!=ListaExamenPerfil[0].idPerfil);
         this.cambioDeColorExamenes(ListaExamenPerfil,false);
 
@@ -367,7 +362,6 @@ export class OrdenCrearComponent implements OnInit {
     }
 
     SeleccionarExamenPorPerfil(ListaExamenPerfil: PerfilExamenes[]){
-        debugger
         const ExamenesNoDuplicados = ListaExamenPerfil.filter(
             y => !this.listaExamenesEnvio.some(
                 x => x.idExamen == y.idExamen && x.idPerfil==y.idPerfil
